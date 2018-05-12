@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /*
 *  main.c
 *  Library for MECA1120 : Finite Elements for dummies
@@ -7,16 +7,6 @@
 *  All rights reserved.
 *
 */
-=======
-﻿/*
- *  main.c
- *  Library for MECA1120 : Finite Elements for dummies
- *
- *  Copyright (C) 2018 UCL-EPL : Vincent Legat
- *  All rights reserved.
- *
- */
->>>>>>> 892f4706b2c091bd45fab6dc95d4a32aa05e66b1
 
 
 #include "glfem.h"
