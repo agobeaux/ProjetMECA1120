@@ -14,7 +14,7 @@
 int main(void)
 {   
  
-    femPoissonProblem* theProblem = femPoissonCreate("../data/triangles_166.txt");
+    femPoissonProblem* theProblem = femPoissonCreate("../data/meshMedium.txt");
     
     // Pour Windows, remplacer l'argument :
     // ("../data/triangles_166.txt") 

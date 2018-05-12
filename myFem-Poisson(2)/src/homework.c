@@ -101,7 +101,16 @@ void femPoissonSolve(femPoissonProblem *theProblem)
             	int iNode = theEdges->edges[iEdge].node[i];
             	double xloc = theMesh->X[iNode];
             	double yloc = theMesh->Y[iNode];
-            	femFullSystemConstrain(theSystem,iNode,0.0);  }}}
+                double vExt = 1.0;
+                double Rin = 0.4;
+                double Rout = 2.0;
+                double value = 0.0;
+                double NormeCarree = xloc*xloc + yloc*yloc;
+                if((Rout*Rout - NormeCarree) < (NormeCarree - Rin*Rin))
+                {
+                    value = vExt;
+                }
+            	femFullSystemConstrain(theSystem,iNode,value);  }}}
       
     femFullSystemEliminate(theSystem);
 }

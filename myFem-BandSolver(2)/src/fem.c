@@ -547,7 +547,7 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) {      
         if (theEdges->edges[iEdge].elem[1] < 0) 
         {   
-            double vExt = -200.0;
+            double vExt = 2.0;
             double Rin = 0.4;
             double Rout = 2.0;
             double value = 0.0;
