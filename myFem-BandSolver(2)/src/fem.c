@@ -537,6 +537,61 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
   
 }
 
+femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut)
+{
+    int i,nContact = n*(n-1)/2;
+    
+    femGrains *theGrains = malloc(sizeof(femGrains));
+    theGrains->n = n;
+    theGrains->radiusIn = radiusIn;
+    theGrains->radiusOut = radiusOut;
+    theGrains->gravity[0] =  0.0;
+    theGrains->gravity[1] = -9.81;
+    theGrains->gamma = 0.5;
+    
+       
+    theGrains->x  = malloc(n*sizeof(double));
+    theGrains->y  = malloc(n*sizeof(double));
+    theGrains->inElem = malloc(n*sizeof(int));
+    theGrains->vx = malloc(n*sizeof(double));
+    theGrains->vy = malloc(n*sizeof(double));
+    theGrains->r  = malloc(n*sizeof(double));
+    theGrains->m  = malloc(n*sizeof(double));       
+    theGrains->dvBoundary = malloc(n * sizeof(double));
+    theGrains->dvContacts = malloc(nContact * sizeof(double));
+   
+    for(i = 0; i < n; i++) {
+        theGrains->r[i] = r;
+        theGrains->m[i] = m;
+        theGrains->x[i] = (i%5) * r * 2.5 - 5 * r + 1e-8; 
+        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn; 
+        //getElem(theGrains);       
+        theGrains->vx[i] = 0.0;
+        theGrains->vy[i] = 0.0; 
+        theGrains->dvBoundary[i] = 0.0; }
+ 
+    for(i = 0; i < nContact; i++)  
+        theGrains->dvContacts[i] = 0.0;
+
+  
+    return theGrains;
+}
+
+void getElem()
+
+void femGrainsFree(femGrains *theGrains)
+{
+    free(theGrains->x);
+    free(theGrains->y);
+    free(theGrains->inElem);
+    free(theGrains->vx);
+    free(theGrains->vy);
+    free(theGrains->r);
+    free(theGrains->m);
+    free(theGrains->dvBoundary);
+    free(theGrains->dvContacts);
+    free(theGrains);
+}
 
 double femMin(double *x, int n) 
 {

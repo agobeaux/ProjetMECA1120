@@ -90,6 +90,28 @@ typedef struct {
     double *soluce;
 } femDiffusionProblem;
 
+typedef struct {
+    int n;
+    double radiusIn;
+    double radiusOut;
+    double gravity[2];
+    double gamma;
+    double *x;
+    double *y;
+    int *inElem;
+    double *vx;
+    double *vy;
+    double *r;
+    double *m;
+    double *dvBoundary;
+    double *dvContacts;
+} femGrains;
+
+
+femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut);
+void        femGrainsFree(femGrains *myGrains);
+void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax);
+double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter); 
 
 femIntegration      *femIntegrationCreate(int n, femElementType type);
 void                 femIntegrationFree(femIntegration *theRule);
