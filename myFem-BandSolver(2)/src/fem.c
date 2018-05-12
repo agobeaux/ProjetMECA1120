@@ -564,8 +564,7 @@ femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, dou
         theGrains->r[i] = r;
         theGrains->m[i] = m;
         theGrains->x[i] = (i%5) * r * 2.5 - 5 * r + 1e-8; 
-        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn; 
-        //getElem(theGrains);       
+        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn;        
         theGrains->vx[i] = 0.0;
         theGrains->vy[i] = 0.0; 
         theGrains->dvBoundary[i] = 0.0; }
@@ -577,7 +576,11 @@ femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, dou
     return theGrains;
 }
 
-void getElem()
+void getElem(femGrains *theGrains, femMesh *theMesh)
+{
+    int i;
+    for(i = 0; i < theGrains->n; i++);
+}
 
 void femGrainsFree(femGrains *theGrains)
 {
