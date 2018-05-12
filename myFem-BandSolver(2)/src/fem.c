@@ -563,8 +563,8 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
             {
                 printf("(Rout*Rout - NormeCarree) > (NormeCarree - Rin*Rin) : %f > %f ?\n",Rout*Rout -NormeCarree,NormeCarree - Rin*Rin);
             }    
-            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[0]],0.0); 
-            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[1]],0.0);
+            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[0]],value); 
+            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[1]],value);
         }
     }
 
