@@ -40,8 +40,8 @@ int main(void)
     int testConvergence; 
     do {
         femDiffusionCompute(theProblem);  
-        femIterativeSolverPrintInfos(theProblem->solver); 
-        testConvergence = femIterativeSolverConverged(theProblem->solver); }
+        femSolverPrintInfos(theProblem->solver); 
+        testConvergence = femSolverConverged(theProblem->solver); }
         while ( testConvergence == 0);
         printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
         printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
@@ -76,8 +76,8 @@ int main(void)
                         clock_t tic = clock();
                         do {
                             femDiffusionCompute(theProblem);  
-                            femIterativeSolverPrintInfos(theProblem->solver); 
-                            testConvergence = femIterativeSolverConverged(theProblem->solver); }
+                            femSolverPrintInfos(theProblem->solver); 
+                            testConvergence = femSolverConverged(theProblem->solver); }
                             while ( testConvergence == 0);
                             if (testConvergence == -1)  printf("    Iterative solver stopped afer a maximum number of iterations\n");
                             printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
