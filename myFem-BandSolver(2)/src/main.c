@@ -16,11 +16,10 @@
 int main(void)
 {  
     printf("\n\n    V : Plot results \n");
-    printf("    S : Spy matrix \n");
-    printf("    F-B-I : Full solver - Band solver - Iterative solver \n");
+    printf("    S : Spy matrix \n");    
     printf("    X-Y-N : Renumbering along x - along y - No renumbering \n");
     
-    femSolverType solverType = FEM_BAND;
+    femSolverType solverType = FEM_ITER;
     femRenumType  renumType  = FEM_YNUM;
     char meshFileName[] = "../data/rect_quad_1601.txt";  
     
@@ -48,7 +47,7 @@ int main(void)
     femSolverType newSolverType = solverType;
     femRenumType  newRenumType  = renumType;
 
-    GLFWwindow* window = glfemInit("MECA1120 : homework 5 ");
+    GLFWwindow* window = glfemInit("MECA1120 : homework project ");
     glfwMakeContextCurrent(window);
 
     do 
@@ -86,10 +85,7 @@ int main(void)
             printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
             fflush(stdout); }
         if (glfwGetKey(window,'V') == GLFW_PRESS)   option = 1;
-        if (glfwGetKey(window,'S') == GLFW_PRESS)   option = 0;
-        if (glfwGetKey(window,'F') == GLFW_PRESS)   newSolverType = FEM_FULL; 
-        if (glfwGetKey(window,'B') == GLFW_PRESS)   newSolverType = FEM_BAND; 
-        if (glfwGetKey(window,'I') == GLFW_PRESS)   newSolverType = FEM_ITER; 
+        if (glfwGetKey(window,'S') == GLFW_PRESS)   option = 0;        
         if (glfwGetKey(window,'X') == GLFW_PRESS)   newRenumType  = FEM_XNUM; 
         if (glfwGetKey(window,'Y') == GLFW_PRESS)   newRenumType  = FEM_YNUM; 
         if (glfwGetKey(window,'N') == GLFW_PRESS)   newRenumType  = FEM_NO; 
