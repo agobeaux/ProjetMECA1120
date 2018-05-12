@@ -46,24 +46,6 @@ void femDiffusionRenumber(femDiffusionProblem *theProblem, femRenumType renumTyp
         default : Error("Unexpected renumbering option"); }
 }
 
-int femDiffusionComputeBand(femDiffusionProblem *theProblem)
-{
-    femMesh *theMesh = theProblem->mesh;
-    int iElem,j,myMax,myMin,myBand,map[4];
-    int nLocal = theMesh->nLocalNode;
-    myBand = 0;
-    for(iElem = 0; iElem < theMesh->nElem; iElem++) {
-        for (j=0; j < nLocal; ++j) 
-            map[j] = theProblem->number[theMesh->elem[iElem*nLocal+j]];
-        myMin = map[0];
-        myMax = map[0];
-        for (j=1; j < nLocal; j++) {
-            myMax = fmax(map[j],myMax);
-            myMin = fmin(map[j],myMin); }
-        if (myBand < (myMax - myMin)) myBand = myMax - myMin; }         
-    return(++myBand);
-}
-
 void femIterativeSolverAssemble(femIterativeSolver* mySolver, double *Aloc, 
                                 double *Bloc, double *Uloc, int *map, int nLoc)
 {

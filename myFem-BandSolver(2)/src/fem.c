@@ -528,7 +528,8 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) {      
         if (theEdges->edges[iEdge].elem[1] < 0) {       
             femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[0]],0.0); 
-            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[1]],0.0); }}
+            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[1]],0.0);
+             }}
   
     double *soluce = femSolverEliminate(theSolver);
     for (i = 0; i < theProblem->mesh->nNode; i++)

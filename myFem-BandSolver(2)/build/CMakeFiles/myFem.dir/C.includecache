@@ -50,11 +50,11 @@ GL/glu.h
 vulkan/vulkan.h
 -
 
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/fem.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/fem.c
 fem.h
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
 
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
 stdio.h
 -
 stdlib.h
@@ -64,23 +64,23 @@ math.h
 string.h
 -
 
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.c
 glfem.h
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.h
 
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.h
 GLFW/glfw3.h
 -
 fem.h
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
 
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/homework.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/homework.c
 fem.h
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/fem.h
 
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/main.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/main.c
 glfem.h
-/home/agobeaux/Documents/GitHub/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver(2)/src/glfem.h
 time.h
 -
 
