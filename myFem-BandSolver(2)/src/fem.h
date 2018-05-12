@@ -68,20 +68,6 @@ typedef struct {
     void *solver;
 } femSolver;
 
-typedef struct {
-    double *B;
-    double **A;
-    int size;
-} femFullSystem;
-
-typedef struct 
-{
-    double *B;
-    double **A;        
-    int size;
-    int band;        
-} femBandSystem;
-
 typedef struct 
 {
     double *R;
@@ -124,8 +110,6 @@ void                 femDiscreteXsi2(femDiscrete* mySpace, double *xsi, double *
 void                 femDiscretePhi2(femDiscrete* mySpace, double xsi, double eta, double *phi);
 void                 femDiscreteDphi2(femDiscrete* mySpace, double xsi, double eta, double *dphidxsi, double *dphideta);
 
-femSolver*           femSolverFullCreate(int size);
-femSolver*           femSolverBandCreate(int size,int band);
 femSolver*           femSolverIterativeCreate(int size);
 void                 femSolverFree(femSolver* mySolver);
 void                 femSolverInit(femSolver* mySolver);
@@ -136,26 +120,6 @@ void                 femSolverConstrain(femSolver* mySolver, int myNode, double 
 void                 femSolverAssemble(femSolver* mySolver, double *Aloc, double *Bloc, double *Uloc, int *map, int nLoc);
 double               femSolverGet(femSolver* mySolver, int i, int j);
 int                  femSolverConverged(femSolver *mySolver);
-
-femFullSystem*       femFullSystemCreate(int size);
-void                 femFullSystemFree(femFullSystem* mySystem);
-void                 femFullSystemInit(femFullSystem* mySystem);
-void                 femFullSystemPrint(femFullSystem* mySystem);
-void                 femFullSystemPrintInfos(femFullSystem* mySystem);
-double*              femFullSystemEliminate(femFullSystem* mySystem);
-void                 femFullSystemConstrain(femFullSystem* mySystem, int myNode, double value);
-void                 femFullSystemAssemble(femFullSystem* mySystem, double *Aloc, double *Bloc, int *map, int nLoc);
-double               femFullSystemGet(femFullSystem* mySystem, int i, int j);
-
-femBandSystem*       femBandSystemCreate(int size, int band);
-void                 femBandSystemFree(femBandSystem* myBandSystem);
-void                 femBandSystemInit(femBandSystem *myBand);
-void                 femBandSystemPrint(femBandSystem *myBand);
-void                 femBandSystemPrintInfos(femBandSystem *myBand);
-double*              femBandSystemEliminate(femBandSystem *myBand);
-void                 femBandSystemConstrain(femBandSystem *myBand, int myNode, double myValue);
-void                 femBandSystemAssemble(femBandSystem* myBandSystem, double *Aloc, double *Bloc, int *map, int nLoc);
-double               femBandSystemGet(femBandSystem* myBandSystem, int i, int j);
 
 femIterativeSolver*  femIterativeSolverCreate(int size);
 void                 femIterativeSolverFree(femIterativeSolver* mySolver);

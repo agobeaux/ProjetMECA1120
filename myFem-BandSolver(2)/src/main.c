@@ -36,72 +36,75 @@ int main(void)
     
     femDiffusionProblem* theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
     clock_t tic = clock();
-    femDiffusionCompute(theProblem);  
-    femSolverPrintInfos(theProblem->solver);
-    printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
-    printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
-    fflush(stdout);
-    
+    femDiffusionCompute(theProblem); 
+    int testConvergence; 
+    do {
+        femDiffusionCompute(theProblem);  
+        femSolverPrintInfos(theProblem->solver); 
+        testConvergence = femSolverConverged(theProblem->solver); }
+        while ( testConvergence == 0);
+        printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
+        printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
+        fflush(stdout);
 
-    int option = 1;    
-    femSolverType newSolverType = solverType;
-    femRenumType  newRenumType  = renumType;
 
-    GLFWwindow* window = glfemInit("MECA1120 : homework project ");
-    glfwMakeContextCurrent(window);
+        int option = 1;     
+        femRenumType  newRenumType  = renumType;
 
-    do 
-    {
-        int testConvergence,w,h;
-        char theMessage[256];
-        sprintf(theMessage, "Max : %.4f ",femMax(theProblem->soluce,theProblem->size));
-        glfwGetFramebufferSize(window,&w,&h);
-      
-        if (option == 1) {
-            glfemReshapeWindows(theProblem->mesh,w,h);
-            glfemPlotField(theProblem->mesh,theProblem->soluce);   }
-        else {
-            glColor3f(1.0,0.0,0.0);
-            glfemPlotSolver(theProblem->solver,theProblem->size,w,h); }
-        glColor3f(0.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);              
-      
-        if (solverType != newSolverType || renumType != newRenumType) { 
-            solverType = newSolverType;
-            renumType = newRenumType;
-            femDiffusionFree(theProblem);
-            theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
-            clock_t tic = clock();
-            do {
-                femDiffusionCompute(theProblem);  
-                femSolverPrintInfos(theProblem->solver); 
-                testConvergence = femSolverConverged(theProblem->solver); }
-            while ( testConvergence == 0);
-            if (testConvergence == -1)  printf("    Iterative solver stopped afer a maximum number of iterations\n");
-            printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
-            switch (renumType) {
-                case FEM_XNUM : printf("    Renumbering along the x-direction\n"); break;
-                case FEM_YNUM : printf("    Renumbering along the y-direction\n"); break;
-                default : break; }
-            printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
-            fflush(stdout); }
-        if (glfwGetKey(window,'V') == GLFW_PRESS)   option = 1;
-        if (glfwGetKey(window,'S') == GLFW_PRESS)   option = 0;        
-        if (glfwGetKey(window,'X') == GLFW_PRESS)   newRenumType  = FEM_XNUM; 
-        if (glfwGetKey(window,'Y') == GLFW_PRESS)   newRenumType  = FEM_YNUM; 
-        if (glfwGetKey(window,'N') == GLFW_PRESS)   newRenumType  = FEM_NO; 
-       
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-             glfwWindowShouldClose(window) != 1 );
-            
+        GLFWwindow* window = glfemInit("MECA1120 : homework 5 ");
+        glfwMakeContextCurrent(window);
+
+        do 
+        {
+            int w,h;
+            char theMessage[256];
+            sprintf(theMessage, "Max : %.4f ",femMax(theProblem->soluce,theProblem->size));
+            glfwGetFramebufferSize(window,&w,&h);
+
+            if (option == 1) {
+                glfemReshapeWindows(theProblem->mesh,w,h);
+                glfemPlotField(theProblem->mesh,theProblem->soluce);   }
+                else {
+                    glColor3f(1.0,0.0,0.0);
+                    glfemPlotSolver(theProblem->solver,theProblem->size,w,h); }
+                    glColor3f(0.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);              
+
+                    if (renumType != newRenumType) {             
+                        renumType = newRenumType;
+                        femDiffusionFree(theProblem);
+                        theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
+                        clock_t tic = clock();
+                        do {
+                            femDiffusionCompute(theProblem);  
+                            femSolverPrintInfos(theProblem->solver); 
+                            testConvergence = femSolverConverged(theProblem->solver); }
+                            while ( testConvergence == 0);
+                            if (testConvergence == -1)  printf("    Iterative solver stopped afer a maximum number of iterations\n");
+                            printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
+                            switch (renumType) {
+                                case FEM_XNUM : printf("    Renumbering along the x-direction\n"); break;
+                                case FEM_YNUM : printf("    Renumbering along the y-direction\n"); break;
+                                default : break; }
+                                printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
+                                fflush(stdout); }
+                                if (glfwGetKey(window,'V') == GLFW_PRESS)   option = 1;
+                                if (glfwGetKey(window,'S') == GLFW_PRESS)   option = 0; 
+                                if (glfwGetKey(window,'X') == GLFW_PRESS)   newRenumType  = FEM_XNUM; 
+                                if (glfwGetKey(window,'Y') == GLFW_PRESS)   newRenumType  = FEM_YNUM; 
+                                if (glfwGetKey(window,'N') == GLFW_PRESS)   newRenumType  = FEM_NO; 
+
+                                glfwSwapBuffers(window);
+                                glfwPollEvents();
+                            } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+                               glfwWindowShouldClose(window) != 1 );
+
     // Check if the ESC key was pressed or the window was closed
-               
-    glfwTerminate(); 
-    femDiffusionFree(theProblem);
-    exit(EXIT_SUCCESS);
-    
-    
 
-}
+                            glfwTerminate(); 
+                            femDiffusionFree(theProblem);
+                            exit(EXIT_SUCCESS);
+
+
+
+                        }
 
