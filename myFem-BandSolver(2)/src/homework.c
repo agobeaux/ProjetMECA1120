@@ -95,8 +95,8 @@ void femIterativeSolverConstrain(femIterativeSolver* mySolver, int myNode, doubl
 // pour que cela soit possible :-)
 //
 
-        mySolver->R[myNode] = 0.0;
-        mySolver->S[myNode] = 0.0; 
+        mySolver->R[myNode] = myValue;
+        mySolver->S[myNode] = myValue; 
 }
 
 double *femIterativeSolverEliminate(femIterativeSolver *mySolver)
