@@ -8,7 +8,7 @@
  *  All rights reserved.
  *
  */
- 
+ // COMMENTAIRE
  
 #include "glfem.h"
 
