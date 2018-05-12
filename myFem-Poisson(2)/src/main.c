@@ -12,7 +12,23 @@
 
 
 int main(void)
-{   
+{ 
+    double mu = 2.0;
+    double gamma = 0.95;
+    double vExt = 20.0;
+
+    //GRAINS
+    int    n = 15;
+    double radius    = 0.1;
+    double mass      = 0.1;
+    double radiusIn  = 0.5;
+    double radiusOut = 2.0;    
+    double dt      = 1e-1;
+    double tEnd    = 8.0;
+    double tol     = 1e-6;
+    double t       = 0;
+    double iterMax = 100;
+    femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut);
  
     femPoissonProblem* theProblem = femPoissonCreate("../data/meshMedium.txt");
     
@@ -31,7 +47,7 @@ int main(void)
     printf("Number of segments    : %4d\n", theProblem->edges->nBoundary);
     printf("Number of unknowns    : %4d\n", theProblem->system->size);
 
-    femPoissonSolve(theProblem);   
+    femPoissonSolve(theProblem, theGrains, mu, gamma, vExt);   
  
     printf("Maximum value : %.4f\n", femMax(theProblem->system->B,theProblem->system->size));
     fflush(stdout);
