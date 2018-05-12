@@ -488,17 +488,25 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
     femSolver *theSolver = theProblem->solver;
     femEdges *theEdges = theProblem->edges;
     int *number = theProblem->number;
-       
+
     if (theSpace->n > 4) Error("Unexpected discrete space size !"); 
     
     double Xloc[4],Yloc[4],phi[4],dphidxsi[4],dphideta[4],dphidx[4],dphidy[4],Aloc[16],Bloc[4],Uloc[4];
     int iEdge,iElem,iInteg,i,j,map[4];
-   
-    for (iElem = 0; iElem < theMesh->nElem; iElem++) {
-        for (i = 0; i < theSpace->n; i++)      Bloc[i] = 0;
-        for (i = 0; i < (theSpace->n)*(theSpace->n); i++) Aloc[i] = 0;
-        femDiffusionMeshLocal(theProblem,iElem,map,Xloc,Yloc,Uloc);  
-        for (iInteg=0; iInteg < theRule->n; iInteg++) {    
+
+    for (iElem = 0; iElem < theMesh->nElem; iElem++) 
+    {
+        for (i = 0; i < theSpace->n; i++)
+        {
+            Bloc[i] = 0;
+        }
+        for (i = 0; i < (theSpace->n)*(theSpace->n); i++) 
+        {
+            Aloc[i] = 0;
+            femDiffusionMeshLocal(theProblem,iElem,map,Xloc,Yloc,Uloc);  
+        }
+        for (iInteg=0; iInteg < theRule->n; iInteg++) 
+        {    
             double xsi    = theRule->xsi[iInteg];
             double eta    = theRule->eta[iInteg];
             double weight = theRule->weight[iInteg];  
@@ -508,33 +516,64 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
             double dxdeta = 0;
             double dydxsi = 0; 
             double dydeta = 0;
-            for (i = 0; i < theSpace->n; i++) {    
+            for (i = 0; i < theSpace->n; i++) 
+            {    
                 dxdxsi += Xloc[i]*dphidxsi[i];       
                 dxdeta += Xloc[i]*dphideta[i];   
                 dydxsi += Yloc[i]*dphidxsi[i];   
-                dydeta += Yloc[i]*dphideta[i]; }
+                dydeta += Yloc[i]*dphideta[i]; 
+            }
             double jac = fabs(dxdxsi * dydeta - dxdeta * dydxsi);
-            for (i = 0; i < theSpace->n; i++) {    
+            for (i = 0; i < theSpace->n; i++) 
+            {    
                 dphidx[i] = (dphidxsi[i] * dydeta - dphideta[i] * dydxsi) / jac;       
-                dphidy[i] = (dphideta[i] * dxdxsi - dphidxsi[i] * dxdeta) / jac; }            
-            for (i = 0; i < theSpace->n; i++) { 
-                for(j = 0; j < theSpace->n; j++) {
-                    Aloc[i*(theSpace->n)+j] += (dphidx[i] * dphidx[j] 
-                                            + dphidy[i] * dphidy[j]) * jac * weight; }}                                                                                            
-            for (i = 0; i < theSpace->n; i++) {
-                Bloc[i] += phi[i] * jac *weight; }}
-        femSolverAssemble(theSolver,Aloc,Bloc,Uloc,map,theSpace->n); } 
+                dphidy[i] = (dphideta[i] * dxdxsi - dphidxsi[i] * dxdeta) / jac; 
+            }            
+            for (i = 0; i < theSpace->n; i++) 
+            { 
+                for(j = 0; j < theSpace->n; j++) 
+                {
+                    Aloc[i*(theSpace->n)+j] += (dphidx[i] * dphidx[j] + dphidy[i] * dphidy[j]) * jac * weight; 
+                }
+            }                                                                                            
+            for (i = 0; i < theSpace->n; i++) 
+            {
+                Bloc[i] += phi[i] * jac *weight;
+            }
+        }
+        femSolverAssemble(theSolver,Aloc,Bloc,Uloc,map,theSpace->n); 
+    } 
 
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) {      
-        if (theEdges->edges[iEdge].elem[1] < 0) {       
+        if (theEdges->edges[iEdge].elem[1] < 0) 
+        {   
+            double vExt = -200.0;
+            double Rin = 0.4;
+            double Rout = 2.0;
+            double value = 0.0;
+            int valueNode = theEdges->edges[iEdge].node[0];
+            double XNode = theMesh->X[valueNode];
+            double YNode = theMesh->Y[valueNode];
+            double NormeCarree = XNode*XNode + YNode*YNode;
+            if((Rout*Rout - NormeCarree) < (NormeCarree - Rin*Rin))
+            {
+                value = vExt;
+            }
+            else
+            {
+                printf("(Rout*Rout - NormeCarree) > (NormeCarree - Rin*Rin) : %f > %f ?\n",Rout*Rout -NormeCarree,NormeCarree - Rin*Rin);
+            }    
             femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[0]],0.0); 
             femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[1]],0.0);
-             }}
-  
+        }
+    }
+
     double *soluce = femSolverEliminate(theSolver);
     for (i = 0; i < theProblem->mesh->nNode; i++)
+    {
         theProblem->soluce[i] += soluce[number[i]];
-  
+    }
+
 }
 
 femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut)
