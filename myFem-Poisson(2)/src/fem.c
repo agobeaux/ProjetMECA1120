@@ -560,7 +560,7 @@ void getElem(femGrains *theGrains, femMesh *theMesh)
 }
 
 int elemContains(double x, double y, femMesh *theMesh, int iElem){    
-    double jacobian[3];
+    int jacobian[3];
     double x2[3], x3[3], y2[3], y3[3];
     int tab[3] = {1,2,0};
     for(int i = 0; i < 3; i++){
