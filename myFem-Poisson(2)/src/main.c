@@ -14,11 +14,11 @@
 int main(void)
 { 
     double mu = 2.0;
-    double gamma = 0.95;
+    double gamma = 0.5;
     double vExt = 2.0;
 
     //GRAINS
-    int    n = 1;
+    int    n = 15;
     double radius    = 0.1;
     double mass      = 0.1;
     double radiusIn  = 0.4;

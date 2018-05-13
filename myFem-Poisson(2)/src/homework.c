@@ -105,26 +105,27 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
             }
         }
         for(iGrains = 0; iGrains < theGrains->n; iGrains++)
-        {
+        {            
             xGrains = theGrains->x[iGrains];
             yGrains = theGrains->y[iGrains]; 
-            xsiGrains = ((xGrains-x[0])-(((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0])))*(x[2]-x[0]))/(x[1]-x[0]);
-            etaGrains = ((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0]));
-            femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
-            vGrains = sqrt((theGrains->vx[iGrains]*theGrains->vx[iGrains])+(theGrains->vy[iGrains]*theGrains->vy[iGrains]));
-            for (i = 0; i < theSpace->n; i++) 
+            if(0 && elemContains(xGrains,yGrains,theMesh,iElem)==1)
             {
-                theSystem->B[map[i]] = gamma*phiGrains[i]*vGrains; 
-            }
-            for (i = 0; i < theSpace->n; i++) 
-            { 
-                for(j = 0; j < theSpace->n; j++) 
-                {
-                    theSystem->A[map[i]][map[j]] += gamma*phiGrains[i]*phiGrains[j];
+                xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
+                etaGrains = (x[0] * (y[1] - yGrains) + x[1] * (yGrains - y[0]) + xGrains * (y[0] - y[1]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
+                //xsiGrains = ((xGrains-x[0])-(((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0])))*(x[2]-x[0]))/(x[1]-x[0]);
+                //etaGrains = ((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0]));
+                femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
+                vGrains = sqrt((theGrains->vx[iGrains]*theGrains->vx[iGrains])+(theGrains->vy[iGrains]*theGrains->vy[iGrains]));
+                for (i = 0; i < theSpace->n; i++) 
+                { 
+                    theSystem->B[map[i]] = gamma*phiGrains[i]*vGrains; 
+                    for(j = 0; j < theSpace->n; j++) 
+                    {
+                        theSystem->A[map[i]][map[j]] += gamma*phiGrains[i]*phiGrains[j];
+                    }
                 }
             }
         }
-
     } 
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) 
     {      
