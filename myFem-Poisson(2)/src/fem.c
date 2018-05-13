@@ -157,7 +157,7 @@ femMesh *femMeshRead(const char *filename)
 {
     femMesh *theMesh = malloc(sizeof(femMesh));
 
-    int i,trash,*elem;
+    int i,j,trash,*elem;
     
     FILE* file = fopen(filename,"r");
     if (file == NULL) Error("No mesh file !");
@@ -173,10 +173,17 @@ femMesh *femMeshRead(const char *filename)
     if (!strncmp(str,"Number of triangles",19))  { 
         ErrorScan(sscanf(str,"Number of triangles %d \n", &theMesh->nElem));
         theMesh->elem = malloc(sizeof(int)*3*theMesh->nElem);
+        theMesh->neighbours = malloc(sizeof(int)*3*theMesh->nElem);
         theMesh->nLocalNode = 3;
         for (i = 0; i < theMesh->nElem; ++i) {
             elem = &(theMesh->elem[i*3]);
-            ErrorScan(fscanf(file,"%d : %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2])); }}
+            ErrorScan(fscanf(file,"%d : %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2]));
+            for(j = 0; j < 3; j++){
+				theMesh->neighbours[3*i+j] = -1; // aucun voisin au départ
+			}
+		}
+	}
+    /*
     else if (!strncmp(str,"Number of quads",15))  { 
         printf("%s \n",str);
         ErrorScan(sscanf(str,"Number of quads %d \n", &theMesh->nElem));  
@@ -185,7 +192,7 @@ femMesh *femMeshRead(const char *filename)
         for (i = 0; i < theMesh->nElem; ++i) {
             elem = &(theMesh->elem[i*4]);
             ErrorScan(fscanf(file,"%d : %d %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2],&elem[3])); }}
-  
+    */ // A supprimer
     fclose(file);
     return theMesh;
 }
@@ -300,8 +307,9 @@ femEdges *femEdgesCreate(femMesh *theMesh)
 
 void femNeighbours(femMesh *theMesh, femEdges *theEdges){
 	double *X = theMesh->X; double *Y = theMesh->Y;
+	int *neighbours = theMesh->neighbours;
 	for(int i = 0; i < theEdges->nEdge; i++){
-		int indexElem1 = theEdges->edges[i].elem[1]
+		int indexElem1 = theEdges->edges[i].elem[1];
 		if(indexElem1 != -1){ // si on a un voisin
 			int indexElem0 = theEdges->edges[i].elem[0];
 			/*
