@@ -97,7 +97,7 @@ void        femGrainsFree(femGrains *myGrains);
 void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax);
 double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter);
 void        getElem(femGrains *theGrains, femMesh *theMesh);
-int         elemContains(int inElem, double x, double y, femMesh *theMesh, int iElem);
+int         elemContains(double x, double y, femMesh *theMesh, int iElem);
 void		femNeighbours(femMesh *theMesh, femEdges *theEdges);
 
 
