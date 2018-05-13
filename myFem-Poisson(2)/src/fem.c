@@ -559,7 +559,7 @@ void getElem(femGrains *theGrains, femMesh *theMesh)
     for(i = 0; i < theGrains->n; i++);
 }
 
-int elemContains(int inElem, double x, double y, femMesh *theMesh, int iElem){    
+int elemContains(double x, double y, femMesh *theMesh, int iElem){    
     double jacobian[3];
     double x2[3], x3[3], y2[3], y3[3];
     int tab[3] = {1,2,0};
