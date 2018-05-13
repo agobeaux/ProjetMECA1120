@@ -478,6 +478,33 @@ void getElem(femGrains *theGrains, femMesh *theMesh)
     for(i = 0; i < theGrains->n; i++);
 }
 
+int elemContains(int inElem, double x, double y, femMesh *theMesh, int iElem){    
+    double jacobian[3];
+    double x2[3], x3[3], y2[3], y3[3];
+    int tab[3] = {1,2,0};
+    for(int i = 0; i < 3; i++){
+        x2[i] = theMesh->X[3*iElem+i];
+        y2[i] = theMesh->Y[3*iElem+i];
+        x3[i] = theMesh->X[3*iElem+tab[i]];
+        y3[i] = theMesh->Y[3*iElem+tab[i]];
+        jacobian[i] = ((x - x3[i]) * (y2[i] - y3[i]) - (x2[i] - x3[i]) * (y - y3[i]) >= 0);
+    }
+    if(jacobian[0] == jacobian[1] && jacobian[1] == jacobian[2]){
+        return iElem;
+    }
+    else{
+        if(jacobian[0] == jacobian[1]){ // jacobian[2] d'un autre signe
+            //doSth;
+        }
+        else if(jacobian[1] == jacobian[2]){ // jacobian[0] d'un autre signe
+            //doSth;
+        }
+        else{ // jacobian[1] d'un autre signe
+            //doSth;
+        }
+    }
+}
+
 void femGrainsFree(femGrains *theGrains)
 {
     free(theGrains->x);

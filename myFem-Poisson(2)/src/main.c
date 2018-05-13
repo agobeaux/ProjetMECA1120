@@ -15,13 +15,13 @@ int main(void)
 { 
     double mu = 2.0;
     double gamma = 0.95;
-    double vExt = 20.0;
+    double vExt = 2.0;
 
     //GRAINS
-    int    n = 15;
+    int    n = 1;
     double radius    = 0.1;
     double mass      = 0.1;
-    double radiusIn  = 0.5;
+    double radiusIn  = 0.4;
     double radiusOut = 2.0;    
     double dt      = 1e-1;
     double tEnd    = 8.0;
@@ -86,6 +86,8 @@ int main(void)
   //          char c= getchar();
   //
             femGrainsUpdate(theGrains,dt,tol,iterMax);
+            femFullSystemInit(theProblem->system);
+            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt);
             t += dt; }
          
         while ( glfwGetTime()-currentTime < theVelocityFactor ) {

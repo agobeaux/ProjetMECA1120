@@ -58,14 +58,16 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
     femFullSystem *theSystem = theProblem->system;
     femIntegration *theRule = theProblem->rule;
     femDiscrete *theSpace = theProblem->space;
- 
-    if (theSpace->n > 4) Error("Unexpected discrete space size !");  
-    double x[4],y[4],phi[4],dphidxsi[4],dphideta[4],dphidx[4],dphidy[4];
-    int iElem,iInteg,iEdge,i,j,map[4];    
 
-    for (iElem = 0; iElem < theMesh->nElem; iElem++) {
-        femMeshLocal(theMesh,iElem,map,x,y);  
-        for (iInteg=0; iInteg < theRule->n; iInteg++) {    
+    if (theSpace->n > 4) Error("Unexpected discrete space size !");  
+    double x[4],y[4],phi[4],phiGrains[3],dphidxsi[4],dphideta[4],dphidx[4],dphidy[4], xGrains, yGrains, xsiGrains, etaGrains, vGrains;
+    int iElem,iInteg,iEdge,i,j,map[4], iGrains;    
+
+    for (iElem = 0; iElem < theMesh->nElem; iElem++) 
+    {
+        femMeshLocal(theMesh,iElem,map,x,y);         
+        for (iInteg=0; iInteg < theRule->n; iInteg++) 
+        {    
             double xsi    = theRule->xsi[iInteg];
             double eta    = theRule->eta[iInteg];
             double weight = theRule->weight[iInteg];  
@@ -77,27 +79,58 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
             double dydeta = 0;
             double xloc = 0;
             double yloc = 0;
-            for (i = 0; i < theSpace->n; i++) {  
+            for (i = 0; i < theSpace->n; i++) 
+            {  
                 xloc   += x[i]*phi[i];  
                 yloc   += y[i]*phi[i];  
                 dxdxsi += x[i]*dphidxsi[i];       
                 dxdeta += x[i]*dphideta[i];   
                 dydxsi += y[i]*dphidxsi[i];   
-                dydeta += y[i]*dphideta[i]; }
+                dydeta += y[i]*dphideta[i]; 
+            }
             double jac = fabs(dxdxsi * dydeta - dxdeta * dydxsi);
-            for (i = 0; i < theSpace->n; i++) {    
+            for (i = 0; i < theSpace->n; i++) 
+            {    
                 dphidx[i] = (dphidxsi[i] * dydeta - dphideta[i] * dydxsi) / jac;       
-                dphidy[i] = (dphideta[i] * dxdxsi - dphidxsi[i] * dxdeta) / jac; }            
-            for (i = 0; i < theSpace->n; i++) { 
-                for(j = 0; j < theSpace->n; j++) {
-                    theSystem->A[map[i]][map[j]] += (dphidx[i] * dphidx[j] 
-                                                   + dphidy[i] * dphidy[j]) * jac * weight; }}                                                                                            
-            for (i = 0; i < theSpace->n; i++) {
-                theSystem->B[map[i]] += phi[i] * jac *weight; }}} 
+                dphidy[i] = (dphideta[i] * dxdxsi - dphidxsi[i] * dxdeta) / jac; 
+            }            
+            for (i = 0; i < theSpace->n; i++) 
+            { 
+                for(j = 0; j < theSpace->n; j++) 
+                {
+                    theSystem->A[map[i]][map[j]] += (mu/theRule->n)*(dphidx[i] * dphidx[j] 
+                     + dphidy[i] * dphidy[j]) * jac * weight; 
+                }
+            }
+        }
+        for(iGrains = 0; iGrains < theGrains->n; iGrains++)
+        {
+            xGrains = theGrains->x[iGrains];
+            yGrains = theGrains->y[iGrains]; 
+            xsiGrains = ((xGrains-x[0])-(((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0])))*(x[2]-x[0]))/(x[1]-x[0]);
+            etaGrains = ((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0]));
+            femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
+            vGrains = sqrt((theGrains->vx[iGrains]*theGrains->vx[iGrains])+(theGrains->vy[iGrains]*theGrains->vy[iGrains]));
+            for (i = 0; i < theSpace->n; i++) 
+            {
+                theSystem->B[map[i]] = gamma*phiGrains[i]*vGrains; 
+            }
+            for (i = 0; i < theSpace->n; i++) 
+            { 
+                for(j = 0; j < theSpace->n; j++) 
+                {
+                    theSystem->A[map[i]][map[j]] += gamma*phiGrains[i]*phiGrains[j];
+                }
+            }
+        }
 
-     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) {      
-        if (theEdges->edges[iEdge].elem[1] < 0) {  
-            for (i = 0; i < 2; i++) {
+    } 
+    for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) 
+    {      
+        if (theEdges->edges[iEdge].elem[1] < 0) 
+        {  
+            for (i = 0; i < 2; i++) 
+            {
             	int iNode = theEdges->edges[iEdge].node[i];
             	double xloc = theMesh->X[iNode];
             	double yloc = theMesh->Y[iNode];                
@@ -109,8 +142,11 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 {
                     value = vExt;
                 }
-            	femFullSystemConstrain(theSystem,iNode,value);  }}}
-      
+                femFullSystemConstrain(theSystem,iNode,value);  
+            }
+        }
+    }
+
     femFullSystemEliminate(theSystem);
 }
 
