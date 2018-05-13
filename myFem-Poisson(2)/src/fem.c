@@ -157,7 +157,7 @@ femMesh *femMeshRead(const char *filename)
 {
     femMesh *theMesh = malloc(sizeof(femMesh));
 
-    int i,trash,*elem;
+    int i,j,trash,*elem;
     
     FILE* file = fopen(filename,"r");
     if (file == NULL) Error("No mesh file !");
@@ -173,10 +173,17 @@ femMesh *femMeshRead(const char *filename)
     if (!strncmp(str,"Number of triangles",19))  { 
         ErrorScan(sscanf(str,"Number of triangles %d \n", &theMesh->nElem));
         theMesh->elem = malloc(sizeof(int)*3*theMesh->nElem);
+        theMesh->neighbours = malloc(sizeof(int)*3*theMesh->nElem);
         theMesh->nLocalNode = 3;
         for (i = 0; i < theMesh->nElem; ++i) {
             elem = &(theMesh->elem[i*3]);
-            ErrorScan(fscanf(file,"%d : %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2])); }}
+            ErrorScan(fscanf(file,"%d : %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2]));
+            for(j = 0; j < 3; j++){
+				theMesh->neighbours[3*i+j] = -1; // aucun voisin au départ
+			}
+		}
+	}
+    /*
     else if (!strncmp(str,"Number of quads",15))  { 
         printf("%s \n",str);
         ErrorScan(sscanf(str,"Number of quads %d \n", &theMesh->nElem));  
@@ -185,7 +192,7 @@ femMesh *femMeshRead(const char *filename)
         for (i = 0; i < theMesh->nElem; ++i) {
             elem = &(theMesh->elem[i*4]);
             ErrorScan(fscanf(file,"%d : %d %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2],&elem[3])); }}
-  
+    */ // A supprimer
     fclose(file);
     return theMesh;
 }
@@ -296,6 +303,80 @@ femEdges *femEdgesCreate(femMesh *theMesh)
     theEdges->nEdge = index;
     theEdges->nBoundary = nBoundary;
     return theEdges;
+}
+
+void femNeighbours(femMesh *theMesh, femEdges *theEdges){
+	double *X = theMesh->X; double *Y = theMesh->Y;
+	int *neighbours = theMesh->neighbours;
+	for(int i = 0; i < theEdges->nEdge; i++){
+		int indexElem1 = theEdges->edges[i].elem[1];
+		if(indexElem1 != -1){ // si on a un voisin
+			int indexElem0 = theEdges->edges[i].elem[0];
+			/*
+			if(X[indexElem0] == X[indexElem1] && Y [indexElem0] == Y[indexElem1]){
+				
+			}
+			else if(X[indexElem0] == X[indexElem1+1] && Y[indexElem0] == Y[indexElem1+1]){
+				
+			}
+			else if(X[indexElem0] == X[indexElem+2] && Y[indexElem0] == Y[indexElem1+2]){
+				if(X[indexElem0+1] == X[indexElem1] && Y [indexElem0+1] == Y[indexElem1]){
+			}
+			else{ // les deux sommets restants sont les sommets communs
+				if(X[indexElem0+1] == X[indexElem1] && Y[indexElem0+1] == Y[indexElem1]){
+					if(X[indexElem0+2] == X[indexElem1+1] && Y[indexElem0+2] == Y[indexElem1]+1){
+						
+					}
+					else{ // X[indexElem0+2] == X[indexElem1+2] && Y[indexElem0+2] == Y[indexElem1+2]
+						
+					}
+				}
+				else if(X[indexElem0+1] == X[indexElem1+1] && Y[indexElem0+1] == Y[indexElem1+1]){
+					if(X[indexElem0+2] == X[indexElem1] && Y[indexElem0+2] == Y[indexElem1]){
+						
+					}
+					else{ // X[indexElem0+2] == X[indexElem1+2] && Y[indexElem0+2] == Y[indexElem1+2]
+						
+					}
+				}
+				else{ // X[indexElem0+1] == X[indexElem1+2] && Y[indexElem0+1] == Y[indexElem1+2]
+					if(X[indexElem0+2] == X[indexElem1] && Y[indexElem0+2] == Y[indexElem1]){
+						
+					}
+					else{ // X[indexElem0+2] == X[indexElem1+1] && Y[indexElem0+2] == Y[indexElem1+1]
+						
+					}
+						
+				}
+			} // Version pas finie : pue car masse lignes mais moins de check du pc quoi...
+			*/
+			
+			// Chiant : regarde quand même pour les K déjà pris
+			int nbFound = 0;
+			int indexNeighbours0 = 0;
+			int indexNeighbours1 = 0;
+			for(int j = 0; j < 3 && nbFound < 2; j++){
+				int found = 0;
+				for(int k = 0; k < 3 && !found; k++){
+					if(X[indexElem0+j] == X[indexElem1+k] && Y[indexElem0+j] == Y[indexElem1+k]){
+						found = 1;
+						indexNeighbours0 += j;
+						indexNeighbours1 += k;
+						nbFound++;
+					}
+				}
+			}
+			neighbours[3*indexElem0+indexNeighbours0] = indexElem1;
+			neighbours[3*indexElem1+indexNeighbours1] = indexElem0;
+			// Convention : dans neighbours[3*indexElem + [0,1,2]] on trouve le voisin par les noeuds :
+			// X[0]-X[1]; X[0]-X[2]; X[1]-X[2]
+				
+		}
+		// et sinon on ne fait rien : dans femMesh il faudrait initiliaser les
+		// neighbours à -1
+	}
+	
+	
 }
 
 void femEdgesPrint(femEdges *theEdges)

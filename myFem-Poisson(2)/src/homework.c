@@ -9,7 +9,8 @@ femPoissonProblem *femPoissonCreate(const char *filename)
     femPoissonProblem *theProblem = malloc(sizeof(femPoissonProblem));
     theProblem->mesh  = femMeshRead(filename);   
     femMeshClean(theProblem->mesh);        
-    theProblem->edges = femEdgesCreate(theProblem->mesh);  
+    theProblem->edges = femEdgesCreate(theProblem->mesh);
+    femNeighbours(theProblem->mesh, theProblem->edges); // rajouté ici
     if (theProblem->mesh->nLocalNode == 4) {
         theProblem->space = femDiscreteCreate(4,FEM_QUAD);
         theProblem->rule = femIntegrationCreate(4,FEM_QUAD); }

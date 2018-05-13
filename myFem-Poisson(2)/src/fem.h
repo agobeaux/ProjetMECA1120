@@ -28,6 +28,7 @@ typedef struct {
     int *elem;
     double *X;
     double *Y;
+    int *neighbours; // A MALLOC !!!
     int nElem;
     int nNode;
     int nLocalNode;
@@ -97,6 +98,7 @@ void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double i
 double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter);
 void        getElem(femGrains *theGrains, femMesh *theMesh);
 int         elemContains(int inElem, double x, double y, femMesh *theMesh, int iElem);
+void		femNeighbours(femMesh *theMesh, femEdges *theEdges);
 
 
 femIntegration      *femIntegrationCreate(int n, femElementType type);
