@@ -28,7 +28,7 @@ typedef struct {
     int *elem;
     double *X;
     double *Y;
-    int *neighbours; // A MALLOC !!!
+    int *neighbours;
     int nElem;
     int nNode;
     int nLocalNode;

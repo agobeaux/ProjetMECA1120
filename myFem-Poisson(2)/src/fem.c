@@ -571,19 +571,9 @@ int elemContains(int inElem, double x, double y, femMesh *theMesh, int iElem){
         jacobian[i] = ((x - x3[i]) * (y2[i] - y3[i]) - (x2[i] - x3[i]) * (y - y3[i]) >= 0);
     }
     if(jacobian[0] == jacobian[1] && jacobian[1] == jacobian[2]){
-        return iElem;
+        return 1;
     }
-    else{
-        if(jacobian[0] == jacobian[1]){ // jacobian[2] d'un autre signe
-            //doSth;
-        }
-        else if(jacobian[1] == jacobian[2]){ // jacobian[0] d'un autre signe
-            //doSth;
-        }
-        else{ // jacobian[1] d'un autre signe
-            //doSth;
-        }
-    }
+    return 0;
 }
 
 void femGrainsFree(femGrains *theGrains)
