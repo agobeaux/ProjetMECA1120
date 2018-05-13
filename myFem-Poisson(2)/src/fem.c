@@ -572,7 +572,7 @@ int elemContains(double x, double y, femMesh *theMesh, int iElem){
         jacobian[i] = (((x2 - x) * (y3 - y) - (x3 - x) * (y2 - y)) >= 0);
 
     }
-    if(!jacobian[0] && !jacobian[1] && !jacobian[2]){
+    if(jacobian[0] == jacobian[1] && jacobian[1] == jacobian[2]){
         return 1;
     }
     return 0;

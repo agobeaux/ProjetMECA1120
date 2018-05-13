@@ -10,7 +10,7 @@ femPoissonProblem *femPoissonCreate(const char *filename)
     theProblem->mesh  = femMeshRead(filename);   
     femMeshClean(theProblem->mesh);        
     theProblem->edges = femEdgesCreate(theProblem->mesh);
-    femNeighbours(theProblem->mesh, theProblem->edges); // rajouté ici
+    //femNeighbours(theProblem->mesh, theProblem->edges); // rajouté ici
     if (theProblem->mesh->nLocalNode == 4) {
         theProblem->space = femDiscreteCreate(4,FEM_QUAD);
         theProblem->rule = femIntegrationCreate(4,FEM_QUAD); }
@@ -104,6 +104,9 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 }
             }
         }
+    }
+    for(iElem = 0; iElem < theMesh->nElem; iElem++){
+        femMeshLocal(theMesh,iElem,map,x,y);
         for(iGrains = 0; iGrains < theGrains->n; iGrains++)
         {            
             xGrains = theGrains->x[iGrains];
@@ -113,10 +116,9 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
                 etaGrains = (x[0] * (y[1] - yGrains) + x[1] * (yGrains - y[0]) + xGrains * (y[0] - y[1]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
                 femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
-                vGrains = sqrt((theGrains->vx[iGrains]*theGrains->vx[iGrains])+(theGrains->vy[iGrains]*theGrains->vy[iGrains]));
                 for (i = 0; i < theSpace->n; i++) 
                 { 
-                    theSystem->B[map[i]] = gamma*phiGrains[i]*vGrains; 
+                    theSystem->B[map[i]] = gamma*phiGrains[i]*theGrains->vy[iGrains]; 
                     for(j = 0; j < theSpace->n; j++) 
                     {
                         theSystem->A[map[i]][map[j]] += gamma*phiGrains[i]*phiGrains[j];
@@ -124,6 +126,7 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 }
             }
         }
+
     } 
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) 
     {      
