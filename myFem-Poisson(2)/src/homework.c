@@ -108,12 +108,10 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
         {            
             xGrains = theGrains->x[iGrains];
             yGrains = theGrains->y[iGrains]; 
-            if(0 && elemContains(xGrains,yGrains,theMesh,iElem)==1)
+            if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
             {
                 xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
                 etaGrains = (x[0] * (y[1] - yGrains) + x[1] * (yGrains - y[0]) + xGrains * (y[0] - y[1]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
-                //xsiGrains = ((xGrains-x[0])-(((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0])))*(x[2]-x[0]))/(x[1]-x[0]);
-                //etaGrains = ((yGrains-y[0])*(x[1]-x[0])-(xGrains-x[0]))/((y[2]-y[0])*(x[1]-x[0])-(x[2]-x[0]));
                 femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
                 vGrains = sqrt((theGrains->vx[iGrains]*theGrains->vx[iGrains])+(theGrains->vy[iGrains]*theGrains->vy[iGrains]));
                 for (i = 0; i < theSpace->n; i++) 
