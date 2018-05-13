@@ -21,6 +21,8 @@
 void        glfemDrawColorElement(float *x, float *y, double *u, int n);
 void 		glfemDrawElement(float *x, float *y, int n);
 void 		glfemDrawNodes(double* x, double* y,int n);
+void        glfemDrawCircle(double x, double y,double r);
+void        glfemDrawDisk(double x, double y, double r);
 
 void 		glfemReshapeWindows(femMesh *theMesh, int width, int heigh);
 void 		glfemPlotField(femMesh *theMesh, double *u);

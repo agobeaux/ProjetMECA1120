@@ -432,7 +432,7 @@ void  femFullSystemConstrain(femFullSystem *mySystem,
     B[myNode] = myValue;
 }
 
-femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut)
+femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh)
 {
     int i,nContact = n*(n-1)/2;
     
@@ -459,11 +459,12 @@ femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, dou
         theGrains->r[i] = r;
         theGrains->m[i] = m;
         theGrains->x[i] = (i%5) * r * 2.5 - 5 * r + 1e-8; 
-        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn;        
+        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn; 
+        theGrains->inElem[i] = 0;       
         theGrains->vx[i] = 0.0;
         theGrains->vy[i] = 0.0; 
         theGrains->dvBoundary[i] = 0.0; }
- 
+    getElem(theGrains, theMesh);
     for(i = 0; i < nContact; i++)  
         theGrains->dvContacts[i] = 0.0;
 

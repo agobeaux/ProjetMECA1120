@@ -51,7 +51,7 @@ void femMeshLocal(const femMesh *theMesh, const int iElem, int *map, double *x, 
 # endif
 # ifndef NOPOISSONSOLVE
 
-void femPoissonSolve(femPoissonProblem *theProblem, double mu, double gamma, double vExt)
+void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt)
 {
     femMesh *theMesh = theProblem->mesh;
     femEdges *theEdges = theProblem->edges;
@@ -61,8 +61,7 @@ void femPoissonSolve(femPoissonProblem *theProblem, double mu, double gamma, dou
  
     if (theSpace->n > 4) Error("Unexpected discrete space size !");  
     double x[4],y[4],phi[4],dphidxsi[4],dphideta[4],dphidx[4],dphidy[4];
-    int iElem,iInteg,iEdge,i,j,map[4];
-    double value = 0.0;
+    int iElem,iInteg,iEdge,i,j,map[4];    
 
     for (iElem = 0; iElem < theMesh->nElem; iElem++) {
         femMeshLocal(theMesh,iElem,map,x,y);  
@@ -103,7 +102,8 @@ void femPoissonSolve(femPoissonProblem *theProblem, double mu, double gamma, dou
             	double xloc = theMesh->X[iNode];
             	double yloc = theMesh->Y[iNode];                
                 double Rin = 0.4;
-                double Rout = 2.0;                
+                double Rout = 2.0;  
+                double value = 0.0;              
                 double NormeCarree = xloc*xloc + yloc*yloc;
                 if((Rout*Rout - NormeCarree) < (NormeCarree - Rin*Rin))
                 {

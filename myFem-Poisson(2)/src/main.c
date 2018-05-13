@@ -27,10 +27,10 @@ int main(void)
     double tEnd    = 8.0;
     double tol     = 1e-6;
     double t       = 0;
-    double iterMax = 100;
-    femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut);
+    double iterMax = 100;    
  
     femPoissonProblem* theProblem = femPoissonCreate("../data/meshMedium.txt");
+    femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut, theProblem->mesh);
     
     // Pour Windows, remplacer l'argument :
     // ("../data/triangles_166.txt") 
@@ -55,23 +55,52 @@ int main(void)
     char theMessage[256];
     sprintf(theMessage, "Max : %.4f", femMax(theProblem->system->B,theProblem->system->size));
     
-    GLFWwindow* window = glfemInit("MECA1120 : homework 3 ");
+    GLFWwindow* window = glfemInit("MECA1120 : FEM PROJECT ");
     glfwMakeContextCurrent(window);
+    int theRunningMode = 1.0;
+    float theVelocityFactor = 0.25;
     do {
-        int w,h;
+        int i,w,h;
+        double currentTime = glfwGetTime();
+
         glfwGetFramebufferSize(window,&w,&h);
         glfemReshapeWindows(theProblem->mesh,w,h);
         glfemPlotField(theProblem->mesh,theProblem->system->B);            
-        glColor3f(1.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);              
+        glColor3f(1.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);  
+        for (i=0 ;i < theGrains->n; i++) {     
+            glColor3f(1,0,0); 
+            glfemDrawDisk(theGrains->x[i],theGrains->y[i],theGrains->r[i]); 
+        }       
+        glColor3f(0,0,0); glfemDrawCircle(0,0,radiusOut);
+        glColor3f(0,0,0); glfemDrawCircle(0,0,radiusIn);         
+        sprintf(theMessage,"Time = %g sec",t);
+        glColor3f(1,0,0); glfemDrawMessage(20,460,theMessage);             
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        if (t < tEnd && theRunningMode == 1) {
+            printf("Time = %4g : ",t);  
+  //
+  // A decommenter pour pouvoir progresser pas par pas
+  //          printf("press CR to compute the next time step >>");
+  //          char c= getchar();
+  //
+            femGrainsUpdate(theGrains,dt,tol,iterMax);
+            t += dt; }
+         
+        while ( glfwGetTime()-currentTime < theVelocityFactor ) {
+          if (glfwGetKey(window,'R') == GLFW_PRESS) 
+                theRunningMode = 1; 
+          if (glfwGetKey(window,'S') == GLFW_PRESS) 
+                theRunningMode = 0; }
     } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-             glfwWindowShouldClose(window) != 1 );
+             !glfwWindowShouldClose(window));
            
     // Check if the ESC key was pressed or the window was closed
                
     glfwTerminate(); 
     femPoissonFree(theProblem);
+    femGrainsFree(theGrains);
     exit(EXIT_SUCCESS);
     
     

@@ -91,10 +91,11 @@ typedef struct {
 } femGrains;
 
 
-femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut);
+femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh);
 void        femGrainsFree(femGrains *myGrains);
 void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax);
 double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter);
+void        getElem(femGrains *theGrains, femMesh *theMesh);
 
 
 femIntegration      *femIntegrationCreate(int n, femElementType type);
@@ -128,7 +129,7 @@ void                 femFullSystemConstrain(femFullSystem* mySystem, int myNode,
 
 femPoissonProblem   *femPoissonCreate(const char *filename);
 void                 femPoissonFree(femPoissonProblem *theProblem);
-void                 femPoissonSolve(femPoissonProblem *theProblem);
+void                 femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt) ;
 
 double               femMin(double *x, int n);
 double               femMax(double *x, int n);
