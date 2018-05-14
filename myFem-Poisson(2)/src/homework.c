@@ -110,7 +110,7 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
             { 
                 for(j = 0; j < theSpace->n; j++) 
                 {
-                    theSystem->A[map[i]][map[j]] += (mu/theRule->n)*(dphidx[i] * dphidx[j] 
+                    theSystem->A[map[i]][map[j]] += mu*(dphidx[i] * dphidx[j] 
                      + dphidy[i] * dphidy[j]) * jac * weight; 
                 }
             }
@@ -137,7 +137,7 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 }
                 for (i = 0; i < theSpace->n; i++) 
                 { 
-                    theSystem->B[map[i]] += gamma*phiGrains[i]*fabs(vGrains); 
+                    theSystem->B[map[i]] += gamma*phiGrains[i]*vGrains; 
                     for(j = 0; j < theSpace->n; j++) 
                     {
                         theSystem->A[map[j]][map[i]] += gamma*phiGrains[i]*phiGrains[j];
@@ -146,7 +146,7 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
             }
         }
 
-    } 
+    }
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) 
     {      
         if (theEdges->edges[iEdge].elem[1] < 0) 
@@ -167,11 +167,11 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 }
                 if(systIsY)
                 {
-                    v = value*(yloc/sqrt(NormeCarree));
+                    v = -value*(cos(atan2(yloc,xloc)));
                 }
                 else
                 {
-                    v = value*(xloc/sqrt(NormeCarree));
+                    v = value*(sin(atan2(yloc,xloc)));
                 }
                 
                 femFullSystemConstrain(theSystem,iNode,v);  
@@ -285,9 +285,6 @@ double fluidSpeed(double xGrains, double yGrains, femPoissonProblem *theProblem,
     return speed;
 }
 
-
-
-
 void femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femPoissonProblem *theProblem)
 {
     int i;    
@@ -307,9 +304,11 @@ void femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax,
 //
 
     for(i = 0; i < n; i++) {
-        double u = 0;//fluidSpeed(x[i],y[i],theProblem, 0);
-        double v = 0;//fluidSpeed(x[i],y[i],theProblem, 1);
-        double fx = m[i] * gx - gamma * (vx[i]-u);
+        double xGrains = x[i];
+        double yGrains = y[i];
+        double u = fluidSpeed(xGrains,yGrains,theProblem, 0);
+        double v = fluidSpeed(xGrains,yGrains,theProblem, 1);
+        double fx = - gamma * (vx[i]-u);
         double fy = m[i] * gy - gamma * (vy[i]-v);
         //printf("u = %f\n", u);
         //printf("v = %f\n", v);

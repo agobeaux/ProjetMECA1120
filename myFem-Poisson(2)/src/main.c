@@ -13,13 +13,13 @@
 
 int main(void)
 { 
-    double mu = 2.0;
+    double mu = 1.0;
     double gamma = 1;
-    double vExt = 5.0;
+    double vExt = 4.0;
 
     //GRAINS
-    int    n = 15;
-    double radius    = 0.075;
+    int    n = 20;
+    double radius    = 0.1;
     double mass      = 0.1;
     double radiusIn  = 0.4;
     double radiusOut = 2.0;    
