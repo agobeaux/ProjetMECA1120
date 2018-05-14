@@ -440,7 +440,19 @@ void femFullSystemInit(femFullSystem *mySystem)
 {
     int i,size = mySystem->size;
     for (i=0 ; i < size*(size+1) ; i++) 
-        mySystem->B[i] = 0;}
+        mySystem->B[i] = 0;
+}
+
+void femFullSystemInit2(femFullSystem *mySystemX, femFullSystem *mySystemY)
+{
+    int i,size = mySystemX->size;
+    for (i=0 ; i < size*(size+1) ; i++)
+    { 
+        mySystemX->B[i] = 0;
+        mySystemY->B[i] = 0;
+    }
+}
+
 
 
 void femFullSystemPrint(femFullSystem *mySystem)

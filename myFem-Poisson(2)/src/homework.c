@@ -115,15 +115,12 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 }
             }
         }
-    }
-    for(iElem = 0; iElem < theMesh->nElem; iElem++){
-        femMeshLocal(theMesh,iElem,map,x,y);
         for(iGrains = 0; iGrains < theGrains->n; iGrains++)
         {            
             xGrains = theGrains->x[iGrains];
             yGrains = theGrains->y[iGrains]; 
-            if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
-            {
+            //if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
+            //{
                 xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
                 etaGrains = (x[0] * (y[1] - yGrains) + x[1] * (yGrains - y[0]) + xGrains * (y[0] - y[1]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
                 femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
@@ -143,10 +140,9 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                         theSystem->A[map[j]][map[i]] += gamma*phiGrains[i]*phiGrains[j];
                     }
                 }
-            }
+            //}
         }
-
-    }
+    }    
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) 
     {      
         if (theEdges->edges[iEdge].elem[1] < 0) 
@@ -167,11 +163,11 @@ void femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double
                 }
                 if(systIsY)
                 {
-                    v = -value*(cos(atan2(yloc,xloc)));
+                    v = -value*(xloc/sqrt(NormeCarree));
                 }
                 else
                 {
-                    v = value*(sin(atan2(yloc,xloc)));
+                    v = value*(yloc/sqrt(NormeCarree));
                 }
                 
                 femFullSystemConstrain(theSystem,iNode,v);  
@@ -268,8 +264,8 @@ double fluidSpeed(double xGrains, double yGrains, femPoissonProblem *theProblem,
     }    
     femDiscrete *theSpace = theProblem->space;
     double x[3],y[3],phiGrains[3], xsiGrains, etaGrains, speed = 0.0;
-    int i,iElem,map[3], iGrains;  
-    for(iElem = 0; iElem < theMesh->nElem; iElem++){
+    int i,iElem,map[3], iGrains, flag = 1;  
+    for(iElem = 0; iElem < theMesh->nElem && flag; iElem++){
         femMeshLocal(theMesh,iElem,map,x,y);
         if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
         {
@@ -280,6 +276,7 @@ double fluidSpeed(double xGrains, double yGrains, femPoissonProblem *theProblem,
             { 
                 speed += theSystem->B[map[i]]*phiGrains[i]; 
             }
+            flag = 0;
         }        
     }
     return speed;

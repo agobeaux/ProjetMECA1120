@@ -18,7 +18,7 @@ int main(void)
     double vExt = 4.0;
 
     //GRAINS
-    int    n = 20;
+    int    n = 10;
     double radius    = 0.1;
     double mass      = 0.1;
     double radiusIn  = 0.4;
@@ -87,8 +87,7 @@ int main(void)
   //          char c= getchar();
   //
             femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
-            femFullSystemInit(theProblem->systemY);
-            femFullSystemInit(theProblem->systemX);
+            femFullSystemInit2(theProblem->systemX, theProblem->systemY);
             femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
             femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
             t += dt; }
