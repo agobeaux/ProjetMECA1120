@@ -15,11 +15,11 @@ int main(void)
 { 
     double mu = 2.0;
     double gamma = 1;
-    double vExt = 2.0;
+    double vExt = 5.0;
 
     //GRAINS
     int    n = 15;
-    double radius    = 0.1;
+    double radius    = 0.075;
     double mass      = 0.1;
     double radiusIn  = 0.4;
     double radiusOut = 2.0;    
@@ -47,7 +47,8 @@ int main(void)
     printf("Number of segments    : %4d\n", theProblem->edges->nBoundary);
     printf("Number of unknowns    : %4d\n", theProblem->systemY->size);
 
-    femPoissonSolveY(theProblem, theGrains, mu, gamma, vExt);
+    femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
+    femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
  
     printf("Maximum value : %.4f\n", femMax(theProblem->systemY->B,theProblem->systemY->size));
     fflush(stdout);
@@ -87,7 +88,9 @@ int main(void)
   //
             femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
             femFullSystemInit(theProblem->systemY);
-            femPoissonSolveY(theProblem, theGrains, mu, gamma, vExt);
+            femFullSystemInit(theProblem->systemX);
+            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
+            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
             t += dt; }
          
         while ( glfwGetTime()-currentTime < theVelocityFactor ) {
