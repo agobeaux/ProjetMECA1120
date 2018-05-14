@@ -77,7 +77,6 @@ typedef struct {
     femEdges *edges;
     femDiscrete *space;
     femIntegration *rule;
-    femSolver *solver;
     int size;
     int *number;
     double *soluce;

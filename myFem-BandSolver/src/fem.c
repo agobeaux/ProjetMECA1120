@@ -9,9 +9,6 @@
 
 #include "fem.h"
 
-static const double _gaussQuad4Xsi[4]    = {-0.577350269189626,-0.577350269189626, 0.577350269189626, 0.577350269189626};
-static const double _gaussQuad4Eta[4]    = { 0.577350269189626,-0.577350269189626,-0.577350269189626, 0.577350269189626};
-static const double _gaussQuad4Weight[4] = { 1.000000000000000, 1.000000000000000, 1.000000000000000, 1.000000000000000};
 static const double _gaussTri3Xsi[3]     = { 0.166666666666667, 0.666666666666667, 0.166666666666667};
 static const double _gaussTri3Eta[3]     = { 0.166666666666667, 0.166666666666667, 0.666666666666667};
 static const double _gaussTri3Weight[3]  = { 0.166666666666667, 0.166666666666667, 0.166666666666667};
@@ -20,12 +17,7 @@ static const double _gaussTri3Weight[3]  = { 0.166666666666667, 0.16666666666666
 femIntegration *femIntegrationCreate(int n, femElementType type)
 {
     femIntegration *theRule = malloc(sizeof(femIntegration));
-    if (type == FEM_QUAD && n == 4) {
-        theRule->n      = 4;
-        theRule->xsi    = _gaussQuad4Xsi;
-        theRule->eta    = _gaussQuad4Eta;
-        theRule->weight = _gaussQuad4Weight; }
-    else if (type == FEM_TRIANGLE && n == 3) {
+    if (type == FEM_TRIANGLE && n == 3) {
         theRule->n      = 3;
         theRule->xsi    = _gaussTri3Xsi;
         theRule->eta    = _gaussTri3Eta;
@@ -68,12 +60,7 @@ void _p1c0_dphidx(double xsi, double eta, double *dphidxsi, double *dphideta)
 femDiscrete *femDiscreteCreate(int n, femElementType type)
 {
     femDiscrete *theSpace = malloc(sizeof(femDiscrete));
-    if (type == FEM_QUAD && n == 4) {
-        theSpace->n       = 4;
-        theSpace->x2      = _q1c0_x;
-        theSpace->phi2    = _q1c0_phi;
-        theSpace->dphi2dx = _q1c0_dphidx; }
-    else if (type == FEM_TRIANGLE && n == 3) {
+    if (type == FEM_TRIANGLE && n == 3) {
         theSpace->n       = 3;
         theSpace->x2      = _p1c0_x;
         theSpace->phi2    = _p1c0_phi;
