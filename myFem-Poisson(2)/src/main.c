@@ -45,15 +45,15 @@ int main(void)
     printf("Number of elements    : %4d\n", theProblem->mesh->nElem);
     printf("Number of local nodes : %4d\n", theProblem->mesh->nLocalNode);
     printf("Number of segments    : %4d\n", theProblem->edges->nBoundary);
-    printf("Number of unknowns    : %4d\n", theProblem->system->size);
+    printf("Number of unknowns    : %4d\n", theProblem->systemY->size);
 
     femPoissonSolveY(theProblem, theGrains, mu, gamma, vExt);
  
-    printf("Maximum value : %.4f\n", femMax(theProblem->system->B,theProblem->system->size));
+    printf("Maximum value : %.4f\n", femMax(theProblem->systemY->B,theProblem->systemY->size));
     fflush(stdout);
     
     char theMessage[256];
-    sprintf(theMessage, "Max : %.4f", femMax(theProblem->system->B,theProblem->system->size));
+    sprintf(theMessage, "Max : %.4f", femMax(theProblem->systemY->B,theProblem->systemY->size));
     
     GLFWwindow* window = glfemInit("MECA1120 : FEM PROJECT ");
     glfwMakeContextCurrent(window);
@@ -65,7 +65,7 @@ int main(void)
 
         glfwGetFramebufferSize(window,&w,&h);
         glfemReshapeWindows(theProblem->mesh,w,h);
-        glfemPlotField(theProblem->mesh,theProblem->system->B);            
+        glfemPlotField(theProblem->mesh,theProblem->systemY->B);            
         glColor3f(1.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);  
         for (i=0 ;i < theGrains->n; i++) {     
             glColor3f(1,0,0); 
@@ -86,7 +86,7 @@ int main(void)
   //          char c= getchar();
   //
             femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
-            femFullSystemInit(theProblem->system);
+            femFullSystemInit(theProblem->systemY);
             femPoissonSolveY(theProblem, theGrains, mu, gamma, vExt);
             t += dt; }
          
