@@ -513,7 +513,7 @@ void  femFullSystemConstrain(femFullSystem *mySystem,
     B[myNode] = myValue;
 }
 
-femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh)
+femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh, double gamma)
 {
     int i,nContact = n*(n-1)/2;
     
@@ -523,7 +523,7 @@ femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, dou
     theGrains->radiusOut = radiusOut;
     theGrains->gravity[0] =  0.0;
     theGrains->gravity[1] = -9.81;
-    theGrains->gamma = 0.5;
+    theGrains->gamma = gamma;
     
        
     theGrains->x  = malloc(n*sizeof(double));
@@ -565,10 +565,10 @@ int elemContains(double x, double y, femMesh *theMesh, int iElem){
     int tab[3] = {1,2,0};
     for(int i = 0; i < 3; i++){
 
-        x2 = theMesh->X[3*iElem+i];
-        y2 = theMesh->Y[3*iElem+i];
-        x3 = theMesh->X[3*iElem+tab[i]];
-        y3 = theMesh->Y[3*iElem+tab[i]];
+        x2 = theMesh->X[theMesh->elem[iElem*3+i]];
+        y2 = theMesh->Y[theMesh->elem[iElem*3+i]];
+        x3 = theMesh->X[theMesh->elem[iElem*3+tab[i]]];
+        y3 = theMesh->Y[theMesh->elem[iElem*3+tab[i]]];
         jacobian[i] = (((x2 - x) * (y3 - y) - (x3 - x) * (y2 - y)) >= 0);
 
     }

@@ -14,7 +14,7 @@
 int main(void)
 { 
     double mu = 2.0;
-    double gamma = 0.5;
+    double gamma = 1;
     double vExt = 2.0;
 
     //GRAINS
@@ -30,7 +30,7 @@ int main(void)
     double iterMax = 100;    
  
     femPoissonProblem* theProblem = femPoissonCreate("../data/meshMedium.txt");
-    femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut, theProblem->mesh);
+    femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut, theProblem->mesh, gamma);
     
     // Pour Windows, remplacer l'argument :
     // ("../data/triangles_166.txt") 
@@ -47,7 +47,7 @@ int main(void)
     printf("Number of segments    : %4d\n", theProblem->edges->nBoundary);
     printf("Number of unknowns    : %4d\n", theProblem->system->size);
 
-    femPoissonSolve(theProblem, theGrains, mu, gamma, vExt);   
+    femPoissonSolveY(theProblem, theGrains, mu, gamma, vExt);
  
     printf("Maximum value : %.4f\n", femMax(theProblem->system->B,theProblem->system->size));
     fflush(stdout);
@@ -85,9 +85,9 @@ int main(void)
   //          printf("press CR to compute the next time step >>");
   //          char c= getchar();
   //
-            femGrainsUpdate(theGrains,dt,tol,iterMax);
+            femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
             femFullSystemInit(theProblem->system);
-            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt);
+            femPoissonSolveY(theProblem, theGrains, mu, gamma, vExt);
             t += dt; }
          
         while ( glfwGetTime()-currentTime < theVelocityFactor ) {

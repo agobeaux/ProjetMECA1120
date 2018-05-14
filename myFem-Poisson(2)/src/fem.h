@@ -71,7 +71,8 @@ typedef struct {
     femEdges *edges;
     femDiscrete *space;
     femIntegration *rule;
-    femFullSystem *system;
+    femFullSystem *systemX;
+    femFullSystem *systemY;
 } femPoissonProblem;
 
 typedef struct {
@@ -92,9 +93,10 @@ typedef struct {
 } femGrains;
 
 
-femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh);
+femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh, double gamma);
 void        femGrainsFree(femGrains *myGrains);
-void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax);
+double      fluidSpeed(double xGrains, double yGrains, femPoissonProblem *theProblem);
+void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femPoissonProblem *theProblem);
 double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter);
 void        getElem(femGrains *theGrains, femMesh *theMesh);
 int         elemContains(double x, double y, femMesh *theMesh, int iElem);
@@ -132,7 +134,8 @@ void                 femFullSystemConstrain(femFullSystem* mySystem, int myNode,
 
 femPoissonProblem   *femPoissonCreate(const char *filename);
 void                 femPoissonFree(femPoissonProblem *theProblem);
-void                 femPoissonSolve(femPoissonProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt) ;
+void                 femPoissonSolveY(femPoissonProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt) ;
+void                 femPoissonSolveX(femPoissonProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt) ;
 
 double               femMin(double *x, int n);
 double               femMax(double *x, int n);
