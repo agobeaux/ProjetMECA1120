@@ -129,22 +129,21 @@ void                 femDiscreteDphi2(femDiscrete* mySpace, double xsi, double e
 femBandSystem*       femBandSystemCreate(int size, int band);
 void                 femBandSystemFree(femBandSystem* myBandSystem);
 void                 femBandSystemInit(femBandSystem *myBand);
-void                 femBandSystemPrint(femBandSystem *myBand);
 void                 femBandSystemPrintInfos(femBandSystem *myBand);
 double*              femBandSystemEliminate(femBandSystem *myBand);
 void                 femBandSystemConstrain(femBandSystem *myBand, int myNode, double myValue);
 void                 femBandSystemAssemble(femBandSystem* myBandSystem, double *Aloc, double *Bloc, int *map, int nLoc);
-double               femBandSystemGet(femBandSystem* myBandSystem, int i, int j);
  
-femCouetteProblem*  femCouetteCreate(const char *filename, femRenumType renumType);
+femCouetteProblem*   femCouetteCreate(const char *filename, femRenumType renumType);
 void                 femSoluceInit(femCouetteProblem *theProblem);
 void                 femCouetteFree(femCouetteProblem *theProblem);
-void                 femCouetteMeshLocal(const femCouetteProblem *theProblem, const int i, int *map, double *x, double *y);//, double *u);
+void                 femCouetteMeshLocal(const femCouetteProblem *theProblem, const int i, int *map, double *x, double *y);
 void                 femCouetteCompute(femCouetteProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY);
 double*              femCouetteNorme(femCouetteProblem *theProblem);
 void                 femCouetteRenumber(femCouetteProblem *theProblem, femRenumType renumType);
 int                  femCouetteComputeBand(femCouetteProblem *theProblem);
 
+int                  compare(const void *nodeOne, const void *nodeTwo) ;
 double               femMin(double *x, int n);
 double               femMax(double *x, int n);
 void                 femError(char *text, int line, char *file);

@@ -12,7 +12,7 @@ add_subdirectory(glfw-3.2.1)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/glfw-3.2.1/include)
 
 # link the aforementioned libraries
-add_executable(${EXEC_NAME} src/fem.c src/glfem.c src/homework.c src/main.c)
+add_executable(${EXEC_NAME} src/fem.c src/glfem.c src/couettewithgrains.c src/main.c)
 target_link_libraries(${EXEC_NAME} glfw ${OPENGL_gl_LIBRARY})
 
 # set exec as the startup project in visual studio

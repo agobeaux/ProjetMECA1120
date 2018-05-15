@@ -105,28 +105,28 @@ CMakeFiles/myFem.dir/src/glfem.c.o.provides: CMakeFiles/myFem.dir/src/glfem.c.o.
 CMakeFiles/myFem.dir/src/glfem.c.o.provides.build: CMakeFiles/myFem.dir/src/glfem.c.o
 
 
-CMakeFiles/myFem.dir/src/homework.c.o: CMakeFiles/myFem.dir/flags.make
-CMakeFiles/myFem.dir/src/homework.c.o: ../src/homework.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/myFem.dir/src/homework.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/myFem.dir/src/homework.c.o   -c /home/gildas/ProjetMECA1120/myFem-BandSolver/src/homework.c
+CMakeFiles/myFem.dir/src/couettewithgrains.c.o: CMakeFiles/myFem.dir/flags.make
+CMakeFiles/myFem.dir/src/couettewithgrains.c.o: ../src/couettewithgrains.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/myFem.dir/src/couettewithgrains.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/myFem.dir/src/couettewithgrains.c.o   -c /home/gildas/ProjetMECA1120/myFem-BandSolver/src/couettewithgrains.c
 
-CMakeFiles/myFem.dir/src/homework.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/myFem.dir/src/homework.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gildas/ProjetMECA1120/myFem-BandSolver/src/homework.c > CMakeFiles/myFem.dir/src/homework.c.i
+CMakeFiles/myFem.dir/src/couettewithgrains.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/myFem.dir/src/couettewithgrains.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gildas/ProjetMECA1120/myFem-BandSolver/src/couettewithgrains.c > CMakeFiles/myFem.dir/src/couettewithgrains.c.i
 
-CMakeFiles/myFem.dir/src/homework.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/myFem.dir/src/homework.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gildas/ProjetMECA1120/myFem-BandSolver/src/homework.c -o CMakeFiles/myFem.dir/src/homework.c.s
+CMakeFiles/myFem.dir/src/couettewithgrains.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/myFem.dir/src/couettewithgrains.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gildas/ProjetMECA1120/myFem-BandSolver/src/couettewithgrains.c -o CMakeFiles/myFem.dir/src/couettewithgrains.c.s
 
-CMakeFiles/myFem.dir/src/homework.c.o.requires:
+CMakeFiles/myFem.dir/src/couettewithgrains.c.o.requires:
 
-.PHONY : CMakeFiles/myFem.dir/src/homework.c.o.requires
+.PHONY : CMakeFiles/myFem.dir/src/couettewithgrains.c.o.requires
 
-CMakeFiles/myFem.dir/src/homework.c.o.provides: CMakeFiles/myFem.dir/src/homework.c.o.requires
-	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/homework.c.o.provides.build
-.PHONY : CMakeFiles/myFem.dir/src/homework.c.o.provides
+CMakeFiles/myFem.dir/src/couettewithgrains.c.o.provides: CMakeFiles/myFem.dir/src/couettewithgrains.c.o.requires
+	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/couettewithgrains.c.o.provides.build
+.PHONY : CMakeFiles/myFem.dir/src/couettewithgrains.c.o.provides
 
-CMakeFiles/myFem.dir/src/homework.c.o.provides.build: CMakeFiles/myFem.dir/src/homework.c.o
+CMakeFiles/myFem.dir/src/couettewithgrains.c.o.provides.build: CMakeFiles/myFem.dir/src/couettewithgrains.c.o
 
 
 CMakeFiles/myFem.dir/src/main.c.o: CMakeFiles/myFem.dir/flags.make
@@ -157,7 +157,7 @@ CMakeFiles/myFem.dir/src/main.c.o.provides.build: CMakeFiles/myFem.dir/src/main.
 myFem_OBJECTS = \
 "CMakeFiles/myFem.dir/src/fem.c.o" \
 "CMakeFiles/myFem.dir/src/glfem.c.o" \
-"CMakeFiles/myFem.dir/src/homework.c.o" \
+"CMakeFiles/myFem.dir/src/couettewithgrains.c.o" \
 "CMakeFiles/myFem.dir/src/main.c.o"
 
 # External object files for target myFem
@@ -165,7 +165,7 @@ myFem_EXTERNAL_OBJECTS =
 
 myFem: CMakeFiles/myFem.dir/src/fem.c.o
 myFem: CMakeFiles/myFem.dir/src/glfem.c.o
-myFem: CMakeFiles/myFem.dir/src/homework.c.o
+myFem: CMakeFiles/myFem.dir/src/couettewithgrains.c.o
 myFem: CMakeFiles/myFem.dir/src/main.c.o
 myFem: CMakeFiles/myFem.dir/build.make
 myFem: glfw-3.2.1/src/libglfw3.a
@@ -184,7 +184,7 @@ CMakeFiles/myFem.dir/build: myFem
 
 CMakeFiles/myFem.dir/requires: CMakeFiles/myFem.dir/src/fem.c.o.requires
 CMakeFiles/myFem.dir/requires: CMakeFiles/myFem.dir/src/glfem.c.o.requires
-CMakeFiles/myFem.dir/requires: CMakeFiles/myFem.dir/src/homework.c.o.requires
+CMakeFiles/myFem.dir/requires: CMakeFiles/myFem.dir/src/couettewithgrains.c.o.requires
 CMakeFiles/myFem.dir/requires: CMakeFiles/myFem.dir/src/main.c.o.requires
 
 .PHONY : CMakeFiles/myFem.dir/requires

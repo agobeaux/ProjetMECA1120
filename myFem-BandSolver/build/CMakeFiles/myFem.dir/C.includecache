@@ -50,6 +50,10 @@ GL/glu.h
 vulkan/vulkan.h
 -
 
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/couettewithgrains.c
+fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
+
 /home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.c
 fem.h
 /home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
@@ -71,10 +75,6 @@ glfem.h
 /home/gildas/ProjetMECA1120/myFem-BandSolver/src/glfem.h
 GLFW/glfw3.h
 -
-fem.h
-/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
-
-/home/gildas/ProjetMECA1120/myFem-BandSolver/src/homework.c
 fem.h
 /home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
 

@@ -12,7 +12,6 @@
 #include <time.h>
 
 
-
 int main(void)
 {
 	double mu = 1.0;
@@ -26,7 +25,7 @@ int main(void)
     double radiusIn  = 0.4;
     double radiusOut = 2.0;    
     double dt      = 1e-1;
-    double tEnd    = 8.0;
+    double tEnd    = 20.0;
     double tol     = 1e-6;
     double t       = 0;
     double iterMax = 100; 
@@ -60,6 +59,7 @@ int main(void)
     
     GLFWwindow* window = glfemInit("MECA1120 : FEM PROJECT ");
     glfwMakeContextCurrent(window);
+
 
     int theRunningMode = 1.0;
     float theVelocityFactor = 0.25;
@@ -151,7 +151,7 @@ int main(void)
              glfwWindowShouldClose(window) != 1 );
             
     // Check if the ESC key was pressed or the window was closed
-               
+         
     glfwTerminate(); 
     femCouetteFree(theProblem);
     femGrainsFree(theGrains);

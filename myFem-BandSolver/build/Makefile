@@ -149,6 +149,33 @@ glfw/fast:
 	$(MAKE) -f glfw-3.2.1/src/CMakeFiles/glfw.dir/build.make glfw-3.2.1/src/CMakeFiles/glfw.dir/build
 .PHONY : glfw/fast
 
+src/couettewithgrains.o: src/couettewithgrains.c.o
+
+.PHONY : src/couettewithgrains.o
+
+# target to build an object file
+src/couettewithgrains.c.o:
+	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/couettewithgrains.c.o
+.PHONY : src/couettewithgrains.c.o
+
+src/couettewithgrains.i: src/couettewithgrains.c.i
+
+.PHONY : src/couettewithgrains.i
+
+# target to preprocess a source file
+src/couettewithgrains.c.i:
+	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/couettewithgrains.c.i
+.PHONY : src/couettewithgrains.c.i
+
+src/couettewithgrains.s: src/couettewithgrains.c.s
+
+.PHONY : src/couettewithgrains.s
+
+# target to generate assembly for a file
+src/couettewithgrains.c.s:
+	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/couettewithgrains.c.s
+.PHONY : src/couettewithgrains.c.s
+
 src/fem.o: src/fem.c.o
 
 .PHONY : src/fem.o
@@ -203,33 +230,6 @@ src/glfem.c.s:
 	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/glfem.c.s
 .PHONY : src/glfem.c.s
 
-src/homework.o: src/homework.c.o
-
-.PHONY : src/homework.o
-
-# target to build an object file
-src/homework.c.o:
-	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/homework.c.o
-.PHONY : src/homework.c.o
-
-src/homework.i: src/homework.c.i
-
-.PHONY : src/homework.i
-
-# target to preprocess a source file
-src/homework.c.i:
-	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/homework.c.i
-.PHONY : src/homework.c.i
-
-src/homework.s: src/homework.c.s
-
-.PHONY : src/homework.s
-
-# target to generate assembly for a file
-src/homework.c.s:
-	$(MAKE) -f CMakeFiles/myFem.dir/build.make CMakeFiles/myFem.dir/src/homework.c.s
-.PHONY : src/homework.c.s
-
 src/main.o: src/main.c.o
 
 .PHONY : src/main.o
@@ -268,15 +268,15 @@ help:
 	@echo "... myFem"
 	@echo "... run"
 	@echo "... glfw"
+	@echo "... src/couettewithgrains.o"
+	@echo "... src/couettewithgrains.i"
+	@echo "... src/couettewithgrains.s"
 	@echo "... src/fem.o"
 	@echo "... src/fem.i"
 	@echo "... src/fem.s"
 	@echo "... src/glfem.o"
 	@echo "... src/glfem.i"
 	@echo "... src/glfem.s"
-	@echo "... src/homework.o"
-	@echo "... src/homework.i"
-	@echo "... src/homework.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
