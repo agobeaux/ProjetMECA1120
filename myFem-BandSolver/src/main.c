@@ -76,8 +76,39 @@ int main(void)
             glfemDrawDisk(theGrains->x[i],theGrains->y[i],theGrains->r[i]); 
             double xNodes[2] = {theGrains->x[i]+theGrains->r[i]/2, theGrains->x[i]-(2/3)*theGrains->r[i]};
             double yNodes[2] = {theGrains->y[i]+theGrains->r[i]/2, theGrains->y[i]+(2/3)*theGrains->r[i]};
-            glColor3f(1,0,0);
-            glfemDrawNodes(xNodes, yNodes, 2, theGrains->r[i]);
+            //glColor3f(1,0,0);
+            //glfemDrawNodes(xNodes, yNodes, 2, theGrains->r[i]);
+            double radiusEye = radius/5.0;
+            
+            double xPupil[2] = {xNodes[0] - radiusEye * 0.3, xNodes[1] + radiusEye * 0.3};
+            double yPupil[2] = {yNodes[0] - radiusEye * 0.3, yNodes[1] + radiusEye * 0.3};
+            double radiusPupil = radiusEye/3.0;
+            glColor3f(1,1,1);
+            glfemDrawDisk(xNodes[0],yNodes[0],radiusEye);
+            glColor3f(0,0,0);
+            glfemDrawCircle(xNodes[0],yNodes[0],radiusEye);
+            
+            glColor3f(1,1,1);
+            glfemDrawDisk(xNodes[1],yNodes[1],radiusEye);
+            glColor3f(0,0,0);
+            glfemDrawCircle(xNodes[1],yNodes[1],radiusEye);
+            
+            //glColor3f(0,0,0);
+            glfemDrawDisk(xPupil[0],yPupil[0],radiusPupil);
+            glfemDrawDisk(xPupil[1],yPupil[1],radiusPupil);
+            
+            /** Plutôt un Nose dans ce cas-ci */
+            double xMouth = xNodes[0];
+			double yMouth = theGrains->y[i];
+			glColor3f(1,0,0);
+			glfemDrawDisk(xMouth,yMouth,radiusEye);
+			
+			/*
+			 * double xMouth = theGrains->x[i]+theGrains->r[i]*3.0/4.0;
+			 * double yMouth = theGrains->y[i] - theGrains->r[i]/4.0;
+			 * // Ca, c'est plutot une bouche
+			 */
+            
             
         }         
         glColor3f(0,0,0); glfemDrawCircle(0,0,radiusOut);
