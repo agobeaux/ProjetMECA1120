@@ -135,14 +135,11 @@ femMesh *femMeshRead(const char *filename)
         for (i = 0; i < theMesh->nElem; ++i) {
             elem = &(theMesh->elem[i*3]);
             ErrorScan(fscanf(file,"%d : %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2])); }}
-    else if (!strncmp(str,"Number of quads",15))  { 
-        printf("%s \n",str);
-        ErrorScan(sscanf(str,"Number of quads %d \n", &theMesh->nElem));
-        theMesh->elem = malloc(sizeof(int)*4*theMesh->nElem);
-        theMesh->nLocalNode = 4;
-        for (i = 0; i < theMesh->nElem; ++i) {
-            elem = &(theMesh->elem[i*4]);
-            ErrorScan(fscanf(file,"%d : %d %d %d %d\n", &trash,&elem[0],&elem[1],&elem[2],&elem[3])); }}
+    else{
+		printf("Corrupted mesh file, only triangles are allowed");
+		fclose(file);
+		return NULL;
+	}
   
     fclose(file);
     return theMesh;
@@ -391,7 +388,10 @@ femCouetteProblem *femCouetteCreate(const char *filename,  femRenumType renumTyp
 {
     int i,band;
     femCouetteProblem *theProblem = malloc(sizeof(femCouetteProblem));
-    theProblem->mesh  = femMeshRead(filename);           
+    theProblem->mesh  = femMeshRead(filename);
+    if(theProblem->mesh == NULL){
+		return NULL;
+	}      
     theProblem->edges = femEdgesCreate(theProblem->mesh); 
     if (theProblem->mesh->nLocalNode == 3) {
         theProblem->space = femDiscreteCreate(3,FEM_TRIANGLE);
