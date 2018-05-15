@@ -14,7 +14,23 @@
 
 
 int main(void)
-{  
+{
+	double mu = 1.0;
+    double gamma = 1;
+    double vExt = 4.0;
+
+    //GRAINS
+    int    n = 10;
+    double radius    = 0.1;
+    double mass      = 0.1;
+    double radiusIn  = 0.4;
+    double radiusOut = 2.0;    
+    double dt      = 1e-1;
+    double tEnd    = 8.0;
+    double tol     = 1e-6;
+    double t       = 0;
+    double iterMax = 100; 
+    
     femSolverType solverType = FEM_BAND;
     femRenumType  renumType  = FEM_YNUM;
     char meshFileName[] = "../data/meshMedium.txt";  
@@ -55,10 +71,47 @@ int main(void)
         glfemReshapeWindows(theProblem->mesh,w,h);
         glfemPlotField(theProblem->mesh,theProblem->soluce);   
 
-        glColor3f(0.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);              
-             
+        glColor3f(0.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);        
+        for (i=0 ;i < theGrains->n; i++) {     
+            glColor3f(1,0,0); 
+            glfemDrawDisk(theGrains->x[i],theGrains->y[i],theGrains->r[i]); 
+        }         
+        glColor3f(0,0,0); glfemDrawCircle(0,0,radiusOut);
+        glColor3f(0,0,0); glfemDrawCircle(0,0,radiusIn);         
+        sprintf(theMessage,"Time = %g sec",t);
+        glColor3f(1,0,0); glfemDrawMessage(20,460,theMessage);  
+
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
+        
+        if (t < tEnd && theRunningMode == 1) {
+            printf("Time = %4g : ",t);
+  //
+  // A decommenter pour pouvoir progresser pas par pas
+  //          printf("press CR to compute the next time step >>");
+  //          char c= getchar();
+  //
+            femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
+            femFullSystemInit2(theProblem->systemX, theProblem->systemY);
+            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
+            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
+            t += dt;
+            
+            femDiffusionFree(theProblem);
+            theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
+            theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
+            do {
+				femDiffusionCompute(theProblem);
+				femSolverPrintInfos(theProblem->solver);
+				theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
+		}
+		while ( glfwGetTime()-currentTime < theVelocityFactor ) {
+          if (glfwGetKey(window,'R') == GLFW_PRESS) 
+                theRunningMode = 1; 
+          if (glfwGetKey(window,'S') == GLFW_PRESS) 
+                theRunningMode = 0; 
+		}
     } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
              glfwWindowShouldClose(window) != 1 );
             
@@ -66,6 +119,7 @@ int main(void)
                
     glfwTerminate(); 
     femDiffusionFree(theProblem);
+    femGrainsFree(theGrains);
     exit(EXIT_SUCCESS);
     
     
