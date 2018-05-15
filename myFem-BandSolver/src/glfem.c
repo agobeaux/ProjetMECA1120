@@ -214,11 +214,11 @@ double glScale(double minimum, double maximum, double value)
     return (value - minimum) / fabs(maximum - minimum);
 }
 
-void glfemDrawNodes(double* x, double* y,int n) 
+void glfemDrawNodes(double* x, double* y,int n, double r) 
 {
-    int i;
+    int i = 50*r;
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0);
+    glPointSize(i);
     glBegin(GL_POINTS);
     for (i = 0; i < n; i++) {      
         glVertex2f(x[i],y[i]); }
@@ -248,6 +248,7 @@ void glfemDrawCircle(double x, double y,double r)
     glVertex2f(r*cos(2*3.14159*0/n)+x,r*sin(2*3.14159*0/n)+y);
     glEnd();
 }
+
 
 void glfemDrawDisk(double x, double y, double r)
 {

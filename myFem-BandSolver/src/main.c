@@ -20,7 +20,7 @@ int main(void)
     double vExt = 4.0;
 
     //GRAINS
-    int    n = 20;
+    int    n = 100;
     double radius    = 0.1;
     double mass      = 0.1;
     double radiusIn  = 0.4;
@@ -71,8 +71,14 @@ int main(void)
         glfemPlotField(theProblem->mesh,femCouetteNorme(theProblem));   
        
         for (i=0 ;i < theGrains->n; i++) {     
-            glColor3f(1,0,0); 
+            
+            glColor3f(255,255,0); 
             glfemDrawDisk(theGrains->x[i],theGrains->y[i],theGrains->r[i]); 
+            double xNodes[2] = {theGrains->x[i]+theGrains->r[i]/2, theGrains->x[i]-(2/3)*theGrains->r[i]};
+            double yNodes[2] = {theGrains->y[i]+theGrains->r[i]/2, theGrains->y[i]+(2/3)*theGrains->r[i]};
+            glColor3f(1,0,0);
+            glfemDrawNodes(xNodes, yNodes, 2, theGrains->r[i]);
+            
         }         
         glColor3f(0,0,0); glfemDrawCircle(0,0,radiusOut);
         glColor3f(0,0,0); glfemDrawCircle(0,0,radiusIn);         
