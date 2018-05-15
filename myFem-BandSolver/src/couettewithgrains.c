@@ -95,9 +95,9 @@ void femCouetteCompute(femCouetteProblem *theProblem, femGrains *theGrains, doub
     femEdges *theEdges = theProblem->edges;
     int *number = theProblem->number;
        
-    if (theSpace->n > 4) Error("Unexpected discrete space size !"); 
+    if (theSpace->n > 3) Error("Unexpected discrete space size !"); 
     
-    double Xloc[4],Yloc[4],phi[4],dphidxsi[4],phiGrains[3], dphideta[4],dphidx[4],dphidy[4],Aloc[16],Bloc[4],xGrains, yGrains, xsiGrains, etaGrains, vGrains;
+    double Xloc[3],Yloc[3],phi[3],dphidxsi[3],phiGrains[3], dphideta[3],dphidx[3],dphidy[3],Aloc[9],Bloc[3],xGrains, yGrains, xsiGrains, etaGrains, vGrains;
     int iEdge,iElem,iInteg,i,j,map[4], iGrains;
    
     for (iElem = 0; iElem < theMesh->nElem; iElem++) {
