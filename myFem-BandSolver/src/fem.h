@@ -85,6 +85,12 @@ typedef struct {
     double *soluceY;
 } femDiffusionProblem;
 
+femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh, double gamma);
+void        femGrainsFree(femGrains *myGrains);
+double      fluidSpeed(double xGrains, double yGrains, femPoissonProblem *theProblem, int systIsY);
+void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femPoissonProblem *theProblem);
+double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter);
+int         elemContains(double x, double y, femMesh *theMesh, int iElem);
 
 femIntegration      *femIntegrationCreate(int n, femElementType type);
 void                 femIntegrationFree(femIntegration *theRule);
