@@ -48,7 +48,8 @@ int main(void)
     
     femDiffusionProblem* theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
     clock_t tic = clock();
-    femDiffusionCompute(theProblem);  
+    femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt, 1);
+    femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt, 0);
     femSolverPrintInfos(theProblem->solver);
     printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
     printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
@@ -66,6 +67,7 @@ int main(void)
     {
         int w,h;
         char theMessage[256];
+        double currentTime = glfwGetTime();
         sprintf(theMessage, "Max : %.4f ",femMax(theProblem->soluce,theProblem->size));
         glfwGetFramebufferSize(window,&w,&h);        
         glfemReshapeWindows(theProblem->mesh,w,h);
@@ -93,18 +95,11 @@ int main(void)
   //          char c= getchar();
   //
             femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
-            femFullSystemInit2(theProblem->systemX, theProblem->systemY);
-            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
-            femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
             t += dt;
-            
             femDiffusionFree(theProblem);
-            theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
-            theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
-            do {
-				femDiffusionCompute(theProblem);
-				femSolverPrintInfos(theProblem->solver);
-				theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
+			femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt,1);
+			femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt,0);
+			femSolverPrintInfos(theProblem->solver);
 		}
 		while ( glfwGetTime()-currentTime < theVelocityFactor ) {
           if (glfwGetKey(window,'R') == GLFW_PRESS) 
