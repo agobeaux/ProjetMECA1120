@@ -29,6 +29,7 @@ void 		glfemPlotField(femMesh *theMesh, double *u);
 void 		glfemPlotMesh(femMesh *theMesh);
 void 		glfemPlotEdges(femEdges *theEdges);
 void 		glfemPlotBnd(femEdges *theEdges);
+void        glfemPlotSolver(femFullSystem *theSystem, int size, int width, int heigh);
 
 void 		glfemMessage(char *message);
 void 		glfemDrawMessage(int h, int v, char *message);

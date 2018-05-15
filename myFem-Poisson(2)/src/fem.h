@@ -132,6 +132,7 @@ void                 femFullSystemInit2(femFullSystem *mySystemX, femFullSystem 
 void                 femFullSystemAlloc(femFullSystem* mySystem, int size);
 double*              femFullSystemEliminate(femFullSystem* mySystem);
 void                 femFullSystemConstrain(femFullSystem* mySystem, int myNode, double value);
+double               femFullSystemGet(femFullSystem* mySystem, int i, int j);
 
 femPoissonProblem   *femPoissonCreate(const char *filename);
 void                 femPoissonFree(femPoissonProblem *theProblem);

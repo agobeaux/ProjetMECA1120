@@ -18,7 +18,7 @@ int main(void)
     double vExt = 4.0;
 
     //GRAINS
-    int    n = 10;
+    int    n = 0;
     double radius    = 0.1;
     double mass      = 0.1;
     double radiusIn  = 0.4;
@@ -49,6 +49,8 @@ int main(void)
 
     femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
     femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
+
+        
  
     printf("Maximum value : %.4f\n", femMax(theProblem->systemY->B,theProblem->systemY->size));
     fflush(stdout);
@@ -65,8 +67,13 @@ int main(void)
         double currentTime = glfwGetTime();
 
         glfwGetFramebufferSize(window,&w,&h);
-        glfemReshapeWindows(theProblem->mesh,w,h);
-        glfemPlotField(theProblem->mesh,theProblem->systemY->B);            
+        glColor3f(1.0,0.0,0.0);
+        glfemPlotSolver(theProblem->systemX,theProblem->systemX->size,w,h); 
+        /*if(theRunningMode){
+            glfemReshapeWindows(theProblem->mesh,w,h);
+            glfemPlotField(theProblem->mesh,theProblem->systemY->B); 
+
+           
         glColor3f(1.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);  
         for (i=0 ;i < theGrains->n; i++) {     
             glColor3f(1,0,0); 
@@ -76,12 +83,12 @@ int main(void)
         glColor3f(0,0,0); glfemDrawCircle(0,0,radiusIn);         
         sprintf(theMessage,"Time = %g sec",t);
         glColor3f(1,0,0); glfemDrawMessage(20,460,theMessage);             
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+
+
 
         if (t < tEnd && theRunningMode == 1) {
             printf("Time = %4g : ",t);  
-  //
+  //    
   // A decommenter pour pouvoir progresser pas par pas
   //          printf("press CR to compute the next time step >>");
   //          char c= getchar();
@@ -91,12 +98,19 @@ int main(void)
             femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 1);
             femPoissonSolve(theProblem, theGrains, mu, gamma, vExt, 0);
             t += dt; }
+                    }
+        else{
+            glColor3f(1.0,0.0,0.0);
+            glfemPlotSolver(theProblem->systemX,theProblem->systemX->size,w,h); 
+        }
          
         while ( glfwGetTime()-currentTime < theVelocityFactor ) {
           if (glfwGetKey(window,'R') == GLFW_PRESS) 
                 theRunningMode = 1; 
           if (glfwGetKey(window,'S') == GLFW_PRESS) 
                 theRunningMode = 0; }
+        glfwSwapBuffers(window);
+        glfwPollEvents();*/
     } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
              !glfwWindowShouldClose(window));
            

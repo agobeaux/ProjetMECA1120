@@ -34,6 +34,11 @@ femIntegration *femIntegrationCreate(int n, femElementType type)
     return theRule; 
 }
 
+double femFullSystemGet(femFullSystem* myFullSystem, int myRow, int myCol)
+{
+    return(myFullSystem->A[myRow][myCol]); 
+}
+
 void femIntegrationFree(femIntegration *theRule)
 {
     free(theRule);

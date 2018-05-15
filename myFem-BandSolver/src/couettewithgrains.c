@@ -11,7 +11,6 @@ int compare(const void *nodeOne, const void *nodeTwo)
     if (diff > 0)    return -1;
     return  0;  
 }
-
 femCouetteProblem *femCouetteCreate(const char *filename,  femRenumType renumType)
 {
     int i,band;

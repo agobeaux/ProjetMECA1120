@@ -19,8 +19,8 @@ int main(void)
     double vExt = 4.0;
 
     //GRAINS
-    int    n = 20;
-    double radius    = 0.1;
+    int    n = 50;
+    double radius    = 0.15;
     double mass      = 0.1;
     double radiusIn  = 0.4;
     double radiusOut = 2.0;    
@@ -95,7 +95,7 @@ int main(void)
             
             double xPupil[2] = {xNodes[0] - radiusEye * 0.3, xNodes[1] + radiusEye * 0.3};
             double yPupil[2] = {yNodes[0] - radiusEye * 0.3, yNodes[1] + radiusEye * 0.3};
-            double radiusPupil = radiusEye/3.0;
+            double radiusPupil = radiusEye/2.0;
             glColor3f(1,1,1);
             glfemDrawDisk(xNodes[0],yNodes[0],radiusEye);
             glColor3f(0,0,0);
