@@ -46,6 +46,9 @@ int main(void)
     
     
     femCouetteProblem* theProblem = femCouetteCreate(meshFileName,renumType);
+    if(theProblem == NULL){
+		return -1;
+	}
     femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut, theProblem->mesh, gamma);
     clock_t tic = clock();
     femCouetteCompute(theProblem, theGrains, mu, gamma, vExt, 1);
