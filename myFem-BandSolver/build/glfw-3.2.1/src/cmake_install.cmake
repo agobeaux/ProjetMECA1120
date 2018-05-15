@@ -1,4 +1,4 @@
-# Install script for directory: /home/gildas/Documents/Q4/LMECA1120/Devoir5/glfw-3.2.1/src
+# Install script for directory: /home/gildas/ProjetMECA1120/myFem-BandSolver/glfw-3.2.1/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

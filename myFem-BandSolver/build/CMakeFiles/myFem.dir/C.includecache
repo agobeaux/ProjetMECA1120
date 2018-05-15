@@ -50,11 +50,11 @@ GL/glu.h
 vulkan/vulkan.h
 -
 
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/fem.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.c
 fem.h
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
 
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
 stdio.h
 -
 stdlib.h
@@ -64,23 +64,23 @@ math.h
 string.h
 -
 
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/glfem.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/glfem.c
 glfem.h
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/glfem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/glfem.h
 
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/glfem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/glfem.h
 GLFW/glfw3.h
 -
 fem.h
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
 
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/homework.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/homework.c
 fem.h
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/fem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/fem.h
 
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/main.c
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/main.c
 glfem.h
-/home/gildas/Documents/Q4/LMECA1120/Devoir5/src/glfem.h
+/home/gildas/ProjetMECA1120/myFem-BandSolver/src/glfem.h
 time.h
 -
 

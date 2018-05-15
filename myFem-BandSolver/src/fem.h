@@ -25,7 +25,6 @@
 
 
 typedef enum {FEM_TRIANGLE,FEM_QUAD} femElementType;
-typedef enum {FEM_FULL,FEM_BAND,FEM_ITER} femSolverType;
 typedef enum {FEM_NO,FEM_XNUM,FEM_YNUM} femRenumType;
 
 typedef struct {
@@ -83,12 +82,28 @@ typedef struct {
     int *number;
     double *soluceX;
     double *soluceY;
-} femDiffusionProblem;
+} femCouetteProblem;
+
+typedef struct {
+    int n;
+    double radiusIn;
+    double radiusOut;
+    double gravity[2];
+    double gamma;
+    double *x;
+    double *y;
+    double *vx;
+    double *vy;
+    double *r;
+    double *m;
+    double *dvBoundary;
+    double *dvContacts;
+} femGrains;
 
 femGrains  *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh, double gamma);
 void        femGrainsFree(femGrains *myGrains);
-double      fluidSpeed(double xGrains, double yGrains, femPoissonProblem *theProblem, int systIsY);
-void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femPoissonProblem *theProblem);
+double      fluidSpeed(double xGrains, double yGrains, femCouetteProblem *theProblem, int systIsY);
+void        femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femCouetteProblem *theProblem);
 double      femGrainsContactIterate(femGrains *myGrains, double dt, int iter);
 int         elemContains(double x, double y, femMesh *theMesh, int iElem);
 
@@ -121,12 +136,14 @@ void                 femBandSystemConstrain(femBandSystem *myBand, int myNode, d
 void                 femBandSystemAssemble(femBandSystem* myBandSystem, double *Aloc, double *Bloc, int *map, int nLoc);
 double               femBandSystemGet(femBandSystem* myBandSystem, int i, int j);
  
-femDiffusionProblem *femDiffusionCreate(const char *filename, femRenumType renumType);
-void                 femDiffusionFree(femDiffusionProblem *theProblem);
-void                 femDiffusionMeshLocal(const femDiffusionProblem *theProblem, const int i, int *map, double *x, double *y, double *u);
-void                 femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY);
-void                 femDiffusionRenumber(femDiffusionProblem *theProblem, femRenumType renumType);
-int                  femDiffusionComputeBand(femDiffusionProblem *theProblem);
+femCouetteProblem*  femCouetteCreate(const char *filename, femRenumType renumType);
+void                 femSoluceInit(femCouetteProblem *theProblem);
+void                 femCouetteFree(femCouetteProblem *theProblem);
+void                 femCouetteMeshLocal(const femCouetteProblem *theProblem, const int i, int *map, double *x, double *y);//, double *u);
+void                 femCouetteCompute(femCouetteProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY);
+double*              femCouetteNorme(femCouetteProblem *theProblem);
+void                 femCouetteRenumber(femCouetteProblem *theProblem, femRenumType renumType);
+int                  femCouetteComputeBand(femCouetteProblem *theProblem);
 
 double               femMin(double *x, int n);
 double               femMax(double *x, int n);

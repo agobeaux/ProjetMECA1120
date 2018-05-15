@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gildas/Documents/Q4/LMECA1120/Devoir5
+CMAKE_SOURCE_DIR = /home/gildas/ProjetMECA1120/myFem-BandSolver
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gildas/Documents/Q4/LMECA1120/Devoir5/build
+CMAKE_BINARY_DIR = /home/gildas/ProjetMECA1120/myFem-BandSolver/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/gildas/Documents/Q4/LMECA1120/Devoir5/build
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/glfw-3.2.1/CMakeFiles/progress.marks
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles 0
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles /home/gildas/ProjetMECA1120/myFem-BandSolver/build/glfw-3.2.1/CMakeFiles/progress.marks
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/clean
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,17 +97,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/preinstall
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/preinstall
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(MAKE) -f CMakeFiles/Makefile2 glfw-3.2.1/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -129,6 +129,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

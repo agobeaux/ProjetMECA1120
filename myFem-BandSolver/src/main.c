@@ -20,7 +20,7 @@ int main(void)
     double vExt = 4.0;
 
     //GRAINS
-    int    n = 10;
+    int    n = 20;
     double radius    = 0.1;
     double mass      = 0.1;
     double radiusIn  = 0.4;
@@ -31,7 +31,6 @@ int main(void)
     double t       = 0;
     double iterMax = 100; 
     
-    femSolverType solverType = FEM_BAND;
     femRenumType  renumType  = FEM_YNUM;
     char meshFileName[] = "../data/meshMedium.txt";  
     
@@ -46,34 +45,31 @@ int main(void)
 
     
     
-    femDiffusionProblem* theProblem = femDiffusionCreate(meshFileName,solverType,renumType);
+    femCouetteProblem* theProblem = femCouetteCreate(meshFileName,renumType);
+    femGrains* theGrains = femGrainsCreateSimple(n,radius,mass,radiusIn,radiusOut, theProblem->mesh, gamma);
     clock_t tic = clock();
-    femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt, 1);
-    femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt, 0);
-    femSolverPrintInfos(theProblem->solver);
+    femCouetteCompute(theProblem, theGrains, mu, gamma, vExt, 1);
+    femCouetteCompute(theProblem, theGrains, mu, gamma, vExt, 0);
+    femBandSystemPrintInfos(theProblem->systemX);
     printf("    CPU time : %.2f [sec] \n", (clock() - tic) * 1.0 /CLOCKS_PER_SEC);
-    printf("    Maximum value : %.4f\n", femMax(theProblem->soluce,theProblem->size));
+    printf("    Maximum value : %.4f\n", femMax(femCouetteNorme(theProblem),theProblem->size));
     fflush(stdout);
     
-
-    int option = 1;    
-    femSolverType newSolverType = solverType;
-    femRenumType  newRenumType  = renumType;
-
     GLFWwindow* window = glfemInit("MECA1120 : FEM PROJECT ");
     glfwMakeContextCurrent(window);
 
+    int theRunningMode = 1.0;
+    float theVelocityFactor = 0.25;
+
     do 
     {
-        int w,h;
+        int i,w,h;
         char theMessage[256];
-        double currentTime = glfwGetTime();
-        sprintf(theMessage, "Max : %.4f ",femMax(theProblem->soluce,theProblem->size));
+        double currentTime = glfwGetTime();        
         glfwGetFramebufferSize(window,&w,&h);        
         glfemReshapeWindows(theProblem->mesh,w,h);
-        glfemPlotField(theProblem->mesh,theProblem->soluce);   
-
-        glColor3f(0.0,0.0,0.0); glfemDrawMessage(20,460,theMessage);        
+        glfemPlotField(theProblem->mesh,femCouetteNorme(theProblem));   
+       
         for (i=0 ;i < theGrains->n; i++) {     
             glColor3f(1,0,0); 
             glfemDrawDisk(theGrains->x[i],theGrains->y[i],theGrains->r[i]); 
@@ -86,20 +82,21 @@ int main(void)
         
         glfwSwapBuffers(window);
         glfwPollEvents();
-        
         if (t < tEnd && theRunningMode == 1) {
-            printf("Time = %4g : ",t);
+            printf("Time = %4g : ",t);  
+
   //
   // A decommenter pour pouvoir progresser pas par pas
   //          printf("press CR to compute the next time step >>");
   //          char c= getchar();
   //
             femGrainsUpdate(theGrains,dt,tol,iterMax, theProblem);
-            t += dt;
-            femDiffusionFree(theProblem);
-			femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt,1);
-			femDiffusionCompute(theProblem, theGrains, mu, gamma, vExt,0);
-			femSolverPrintInfos(theProblem->solver);
+            t += dt;  
+            femSoluceInit(theProblem); 
+            femBandSystemInit(theProblem->systemX);
+            femBandSystemInit(theProblem->systemY);
+			femCouetteCompute(theProblem, theGrains, mu, gamma, vExt,1);
+			femCouetteCompute(theProblem, theGrains, mu, gamma, vExt,0);
 		}
 		while ( glfwGetTime()-currentTime < theVelocityFactor ) {
           if (glfwGetKey(window,'R') == GLFW_PRESS) 
@@ -113,7 +110,7 @@ int main(void)
     // Check if the ESC key was pressed or the window was closed
                
     glfwTerminate(); 
-    femDiffusionFree(theProblem);
+    femCouetteFree(theProblem);
     femGrainsFree(theGrains);
     exit(EXIT_SUCCESS);
     

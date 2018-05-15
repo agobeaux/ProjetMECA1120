@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gildas/Documents/Q4/LMECA1120/Devoir5
+CMAKE_SOURCE_DIR = /home/gildas/ProjetMECA1120/myFem-BandSolver
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gildas/Documents/Q4/LMECA1120/Devoir5/build
+CMAKE_BINARY_DIR = /home/gildas/ProjetMECA1120/myFem-BandSolver/build
 
 # Utility rule file for run.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/gildas/Documents/Q4/LMECA1120/Devoir5/build
 include CMakeFiles/run.dir/progress.make
 
 CMakeFiles/run: myFem
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) ./myFem
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) ./myFem
 	./myFem
 
 run: CMakeFiles/run
@@ -72,6 +72,6 @@ CMakeFiles/run.dir/clean:
 .PHONY : CMakeFiles/run.dir/clean
 
 CMakeFiles/run.dir/depend:
-	cd /home/gildas/Documents/Q4/LMECA1120/Devoir5/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gildas/Documents/Q4/LMECA1120/Devoir5 /home/gildas/Documents/Q4/LMECA1120/Devoir5 /home/gildas/Documents/Q4/LMECA1120/Devoir5/build /home/gildas/Documents/Q4/LMECA1120/Devoir5/build /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/run.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/gildas/ProjetMECA1120/myFem-BandSolver/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gildas/ProjetMECA1120/myFem-BandSolver /home/gildas/ProjetMECA1120/myFem-BandSolver /home/gildas/ProjetMECA1120/myFem-BandSolver/build /home/gildas/ProjetMECA1120/myFem-BandSolver/build /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/run.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/run.dir/depend
 

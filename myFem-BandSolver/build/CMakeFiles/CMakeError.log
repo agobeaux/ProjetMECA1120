@@ -1,24 +1,24 @@
 Determining if the pthread_create exist failed with the following output:
-Change Dir: /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp
+Change Dir: /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_5226c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_5226c.dir/build.make CMakeFiles/cmTC_5226c.dir/build
-make[1]: Entering directory '/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_5226c.dir/CheckSymbolExists.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_5226c.dir/CheckSymbolExists.c.o   -c /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_5226c
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5226c.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_5226c.dir/CheckSymbolExists.c.o  -o cmTC_5226c 
-CMakeFiles/cmTC_5226c.dir/CheckSymbolExists.c.o: In function `main':
-CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+Run Build Command:"/usr/bin/make" "cmTC_2e55e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2e55e.dir/build.make CMakeFiles/cmTC_2e55e.dir/build
+make[1]: Entering directory '/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2e55e.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_2e55e.dir/CheckSymbolExists.c.o   -c /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_2e55e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2e55e.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_2e55e.dir/CheckSymbolExists.c.o  -o cmTC_2e55e 
+CMakeFiles/cmTC_2e55e.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_5226c.dir/build.make:97: recipe for target 'cmTC_5226c' failed
-make[1]: *** [cmTC_5226c] Error 1
-make[1]: Leaving directory '/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_5226c/fast' failed
-make: *** [cmTC_5226c/fast] Error 2
+CMakeFiles/cmTC_2e55e.dir/build.make:97: recipe for target 'cmTC_2e55e' failed
+make[1]: *** [cmTC_2e55e] Error 1
+make[1]: Leaving directory '/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_2e55e/fast' failed
+make: *** [cmTC_2e55e/fast] Error 2
 
-File /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <pthread.h>
 
@@ -34,22 +34,22 @@ int main(int argc, char** argv)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp
+Change Dir: /home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_fa657/fast"
-/usr/bin/make -f CMakeFiles/cmTC_fa657.dir/build.make CMakeFiles/cmTC_fa657.dir/build
-make[1]: Entering directory '/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_fa657.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_fa657.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.10/Modules/CheckFunctionExists.c
-Linking C executable cmTC_fa657
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fa657.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_fa657.dir/CheckFunctionExists.c.o  -o cmTC_fa657 -lpthreads 
-/usr/bin/ld: cannot find -lpthreads
+Run Build Command:"/usr/bin/make" "cmTC_f99d2/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f99d2.dir/build.make CMakeFiles/cmTC_f99d2.dir/build
+make[1]: Entering directory '/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f99d2.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_f99d2.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_f99d2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f99d2.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_f99d2.dir/CheckFunctionExists.c.o  -o cmTC_f99d2 -lpthreads 
+/usr/bin/x86_64-linux-gnu-ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_fa657.dir/build.make:97: recipe for target 'cmTC_fa657' failed
-make[1]: *** [cmTC_fa657] Error 1
-make[1]: Leaving directory '/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_fa657/fast' failed
-make: *** [cmTC_fa657/fast] Error 2
+CMakeFiles/cmTC_f99d2.dir/build.make:97: recipe for target 'cmTC_f99d2' failed
+make[1]: *** [cmTC_f99d2] Error 1
+make[1]: Leaving directory '/home/gildas/ProjetMECA1120/myFem-BandSolver/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_f99d2/fast' failed
+make: *** [cmTC_f99d2/fast] Error 2
 
 

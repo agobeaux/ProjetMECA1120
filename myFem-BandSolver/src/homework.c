@@ -12,7 +12,7 @@ int compare(const void *nodeOne, const void *nodeTwo)
     return  0;  
 }
 
-void femDiffusionRenumber(femDiffusionProblem *theProblem, femRenumType renumType)
+void femCouetteRenumber(femCouetteProblem *theProblem, femRenumType renumType)
 {
     int i, *inverse;
     
@@ -44,7 +44,7 @@ void femDiffusionRenumber(femDiffusionProblem *theProblem, femRenumType renumTyp
         default : Error("Unexpected renumbering option"); }
 }
 
-int femDiffusionComputeBand(femDiffusionProblem *theProblem)
+int femCouetteComputeBand(femCouetteProblem *theProblem)
 {
     femMesh *theMesh = theProblem->mesh;
     int iElem,j,myMax,myMin,myBand,map[4];
@@ -126,10 +126,7 @@ double femGrainsContactIterate(femGrains *myGrains, double dt, int iter)
     return error;
 }
 
-# endif
-# ifndef NOUPDATE
-
-double fluidSpeed(double xGrains, double yGrains, femDiffusionProblem *theProblem, int systIsY)
+double fluidSpeed(double xGrains, double yGrains, femCouetteProblem *theProblem, int systIsY)
 {
     femMesh *theMesh = theProblem->mesh;    
     femBandSystem *theSystem;
@@ -149,7 +146,7 @@ double fluidSpeed(double xGrains, double yGrains, femDiffusionProblem *theProble
     double x[3],y[3],phiGrains[3], xsiGrains, etaGrains, speed = 0.0;
     int i,iElem,map[3], iGrains, flag = 1;  
     for(iElem = 0; iElem < theMesh->nElem && flag; iElem++){
-        femMeshLocal(theMesh,iElem,map,x,y);
+        femCouetteMeshLocal(theProblem,iElem,map,x,y);
         if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
         {
             xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
@@ -157,7 +154,7 @@ double fluidSpeed(double xGrains, double yGrains, femDiffusionProblem *theProble
             femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
             for (i = 0; i < theSpace->n; i++) 
             { 
-                speed += soluce[i]*phiGrains[i]; 
+                speed += soluce[theMesh->elem[iElem*3+i]]*phiGrains[i]; 
             }
             flag = 0;
         }        
@@ -165,7 +162,7 @@ double fluidSpeed(double xGrains, double yGrains, femDiffusionProblem *theProble
     return speed;
 }
 
-void femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femPoissonProblem *theProblem)
+void femGrainsUpdate(femGrains *myGrains, double dt, double tol, double iterMax, femCouetteProblem *theProblem)
 {
     int i;    
     int n = myGrains->n;

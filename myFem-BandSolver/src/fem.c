@@ -316,11 +316,6 @@ double femBandSystemGet(femBandSystem* myBandSystem, int myRow, int myCol)
     return(value);
 }
 
-double femFullSystemGet(femFullSystem* myFullSystem, int myRow, int myCol)
-{
-    return(myFullSystem->A[myRow][myCol]); 
-}
-
 void femBandSystemAssemble(femBandSystem* myBandSystem, double *Aloc, double *Bloc, int *map, int nLoc)
 {
     int i,j;
@@ -392,10 +387,10 @@ double  *femBandSystemEliminate(femBandSystem *myBand)
     return(myBand->B);
 }
 
-femDiffusionProblem *femDiffusionCreate(const char *filename,  femRenumType renumType)
+femCouetteProblem *femCouetteCreate(const char *filename,  femRenumType renumType)
 {
     int i,band;
-    femDiffusionProblem *theProblem = malloc(sizeof(femDiffusionProblem));
+    femCouetteProblem *theProblem = malloc(sizeof(femCouetteProblem));
     theProblem->mesh  = femMeshRead(filename);           
     theProblem->edges = femEdgesCreate(theProblem->mesh); 
     if (theProblem->mesh->nLocalNode == 3) {
@@ -404,19 +399,31 @@ femDiffusionProblem *femDiffusionCreate(const char *filename,  femRenumType renu
     }
     theProblem->size = theProblem->mesh->nNode;
     theProblem->number  = malloc(sizeof(int)*theProblem->size);
-    femDiffusionRenumber(theProblem,renumType);
-    band = femDiffusionComputeBand(theProblem);
-    theProblem->systemX = femBandSystemCreate(size, band);
-    theProblem->systemY = femBandSystemCreate(size, band);
+    femCouetteRenumber(theProblem,renumType);
+    band = femCouetteComputeBand(theProblem);
+    theProblem->systemX = femBandSystemCreate(theProblem->size, band);
+    theProblem->systemY = femBandSystemCreate(theProblem->size, band);
     theProblem->soluceX = malloc(sizeof(double)*theProblem->size);
     theProblem->soluceY = malloc(sizeof(double)*theProblem->size);
-    for (i = 0; i < theProblem->size; i++)      
-        theProblem->soluce[i] = 0;
+    for (i = 0; i < theProblem->size; i++)
+    {      
+        theProblem->soluceX[i] = 0;
+        theProblem->soluceY[i] = 0;
+    }
  
     return theProblem;
 }
 
-void femDiffusionFree(femDiffusionProblem *theProblem)
+void femSoluceInit(femCouetteProblem *theProblem)
+{
+    for (int i = 0; i < theProblem->size; i++)
+    {      
+        theProblem->soluceX[i] = 0;
+        theProblem->soluceY[i] = 0;
+    }
+}
+
+void femCouetteFree(femCouetteProblem *theProblem)
 {
     femIntegrationFree(theProblem->rule);
     femDiscreteFree(theProblem->space);
@@ -431,7 +438,7 @@ void femDiffusionFree(femDiffusionProblem *theProblem)
 }
     
 
-void femDiffusionMeshLocal(const femDiffusionProblem *theProblem, const int iElem, int *map, double *x, double *y, double *u)
+void femCouetteMeshLocal(const femCouetteProblem *theProblem, const int iElem, int *map, double *x, double *y)
 {
     femMesh *theMesh = theProblem->mesh;
     int j,nLocal = theMesh->nLocalNode;
@@ -440,12 +447,12 @@ void femDiffusionMeshLocal(const femDiffusionProblem *theProblem, const int iEle
         map[j] = theMesh->elem[iElem*nLocal+j];
         x[j]   = theMesh->X[map[j]];
         y[j]   = theMesh->Y[map[j]]; 
-        u[j]   = theProblem->soluce[map[j]];
+        //u[j]   = theProblem->soluce[map[j]];
         map[j] = theProblem->number[map[j]];
         }   
 }
 
-void femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY)
+void femCouetteCompute(femCouetteProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY)
 {
     femMesh *theMesh = theProblem->mesh;
     femIntegration *theRule = theProblem->rule;
@@ -464,13 +471,13 @@ void femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, 
        
     if (theSpace->n > 4) Error("Unexpected discrete space size !"); 
     
-    double Xloc[4],Yloc[4],phi[4],dphidxsi[4],dphideta[4],dphidx[4],dphidy[4],Aloc[16],Bloc[4],Uloc[4];
-    int iEdge,iElem,iInteg,i,j,map[4];
+    double Xloc[4],Yloc[4],phi[4],dphidxsi[4],phiGrains[3], dphideta[4],dphidx[4],dphidy[4],Aloc[16],Bloc[4],xGrains, yGrains, xsiGrains, etaGrains, vGrains;
+    int iEdge,iElem,iInteg,i,j,map[4], iGrains;
    
     for (iElem = 0; iElem < theMesh->nElem; iElem++) {
         for (i = 0; i < theSpace->n; i++)      Bloc[i] = 0;
         for (i = 0; i < (theSpace->n)*(theSpace->n); i++) Aloc[i] = 0;
-        femDiffusionMeshLocal(theProblem,iElem,map,Xloc,Yloc,Uloc);  
+        femCouetteMeshLocal(theProblem,iElem,map,Xloc,Yloc);  
         for (iInteg=0; iInteg < theRule->n; iInteg++) {    
             double xsi    = theRule->xsi[iInteg];
             double eta    = theRule->eta[iInteg];
@@ -501,10 +508,10 @@ void femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, 
         {            
             xGrains = theGrains->x[iGrains];
             yGrains = theGrains->y[iGrains]; 
-            //if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
-            //{
-                xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
-                etaGrains = (x[0] * (y[1] - yGrains) + x[1] * (yGrains - y[0]) + xGrains * (y[0] - y[1]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
+            if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
+            {
+                xsiGrains = -(Xloc[0] * (Yloc[2] - yGrains) + Xloc[2] * (yGrains - Yloc[0]) + xGrains * (Yloc[0] - Yloc[2]))/(Xloc[0] * (Yloc[1] - Yloc[2]) + Xloc[1] * (Yloc[2] - Yloc[0]) + Xloc[2] * (Yloc[0] - Yloc[1]));
+                etaGrains = (Xloc[0] * (Yloc[1] - yGrains) + Xloc[1] * (yGrains - Yloc[0]) + xGrains * (Yloc[0] - Yloc[1]))/(Xloc[0] * (Yloc[1] - Yloc[2]) + Xloc[1] * (Yloc[2] - Yloc[0]) + Xloc[2] * (Yloc[0] - Yloc[1]));
                 femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
                 if(systIsY)
                 {
@@ -522,7 +529,7 @@ void femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, 
                         Aloc[i*(theSpace->n)+j] += gamma*phiGrains[i]*phiGrains[j];
                     }
                 }
-            //}
+            }
         }
         femBandSystemAssemble(theSystem, Aloc,Bloc,map,theSpace->n);
     } 
@@ -567,6 +574,19 @@ void femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, 
     }  
 }
 
+double *femCouetteNorme(femCouetteProblem *theProblem)
+{
+    double X, Y;
+    double *soluce = malloc(theProblem->mesh->nNode*sizeof(double));
+    for(int i = 0; i < theProblem->mesh->nNode; i++)
+    {
+        X = theProblem->soluceX[i];
+        Y = theProblem->soluceY[i];
+        soluce[i] = sqrt(X*X+Y*Y);
+    }
+    return soluce;
+}
+
 femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, double radiusOut, femMesh *theMesh, double gamma)
 {
     int i,nContact = n*(n-1)/2;
@@ -582,7 +602,6 @@ femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, dou
        
     theGrains->x  = malloc(n*sizeof(double));
     theGrains->y  = malloc(n*sizeof(double));
-    theGrains->inElem = malloc(n*sizeof(int));
     theGrains->vx = malloc(n*sizeof(double));
     theGrains->vy = malloc(n*sizeof(double));
     theGrains->r  = malloc(n*sizeof(double));
@@ -594,12 +613,10 @@ femGrains *femGrainsCreateSimple(int n, double r, double m, double radiusIn, dou
         theGrains->r[i] = r;
         theGrains->m[i] = m;
         theGrains->x[i] = (i%5) * r * 2.5 - 5 * r + 1e-8; 
-        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn; 
-        theGrains->inElem[i] = 0;       
+        theGrains->y[i] = (i/5) * r * 2.5 + 2 * r + radiusIn;       
         theGrains->vx[i] = 0.0;
         theGrains->vy[i] = 0.0; 
         theGrains->dvBoundary[i] = 0.0; }
-    getElem(theGrains, theMesh);
     for(i = 0; i < nContact; i++)  
         theGrains->dvContacts[i] = 0.0;
 
@@ -630,7 +647,6 @@ void femGrainsFree(femGrains *theGrains)
 {
     free(theGrains->x);
     free(theGrains->y);
-    free(theGrains->inElem);
     free(theGrains->vx);
     free(theGrains->vy);
     free(theGrains->r);

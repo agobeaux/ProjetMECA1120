@@ -1,4 +1,4 @@
-# Install script for directory: /home/gildas/Documents/Q4/LMECA1120/Devoir5
+# Install script for directory: /home/gildas/ProjetMECA1120/myFem-BandSolver
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/glfw-3.2.1/cmake_install.cmake")
+  include("/home/gildas/ProjetMECA1120/myFem-BandSolver/build/glfw-3.2.1/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/gildas/Documents/Q4/LMECA1120/Devoir5/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/gildas/ProjetMECA1120/myFem-BandSolver/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -6,5 +6,5 @@ C_FLAGS =
 
 C_DEFINES = -Dgraphic
 
-C_INCLUDES = -I/home/gildas/Documents/Q4/LMECA1120/Devoir5/glfw-3.2.1/include 
+C_INCLUDES = -I/home/gildas/ProjetMECA1120/myFem-BandSolver/glfw-3.2.1/include 
 
