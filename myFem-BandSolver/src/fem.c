@@ -392,33 +392,24 @@ double  *femBandSystemEliminate(femBandSystem *myBand)
     return(myBand->B);
 }
 
-femDiffusionProblem *femDiffusionCreate(const char *filename, femSolverType solverType, femRenumType renumType)
+femDiffusionProblem *femDiffusionCreate(const char *filename,  femRenumType renumType)
 {
     int i,band;
     femDiffusionProblem *theProblem = malloc(sizeof(femDiffusionProblem));
     theProblem->mesh  = femMeshRead(filename);           
-    theProblem->edges = femEdgesCreate(theProblem->mesh);  
-    if (theProblem->mesh->nLocalNode == 4) {
-        theProblem->space = femDiscreteCreate(4,FEM_QUAD);
-        theProblem->rule = femIntegrationCreate(4,FEM_QUAD); }
-    else if (theProblem->mesh->nLocalNode == 3) {
+    theProblem->edges = femEdgesCreate(theProblem->mesh); 
+    if (theProblem->mesh->nLocalNode == 3) {
         theProblem->space = femDiscreteCreate(3,FEM_TRIANGLE);
-        theProblem->rule = femIntegrationCreate(3,FEM_TRIANGLE); }
+        theProblem->rule = femIntegrationCreate(3,FEM_TRIANGLE); 
+    }
     theProblem->size = theProblem->mesh->nNode;
     theProblem->number  = malloc(sizeof(int)*theProblem->size);
     femDiffusionRenumber(theProblem,renumType);
-         
-    switch (solverType) {
-        case FEM_FULL : 
-                theProblem->solver = femSolverFullCreate(theProblem->size); break;
-        case FEM_BAND : 
-                band = femDiffusionComputeBand(theProblem);
-                theProblem->solver = femSolverBandCreate(theProblem->size,band); break;
-        case FEM_ITER : 
-               theProblem->solver = femSolverIterativeCreate(theProblem->size); break;
-        default : Error("Unexpected solver option"); }
-        
-    theProblem->soluce = malloc(sizeof(double)*theProblem->size);
+    band = femDiffusionComputeBand(theProblem);
+    theProblem->systemX = femBandSystemCreate(size, band);
+    theProblem->systemY = femBandSystemCreate(size, band);
+    theProblem->soluceX = malloc(sizeof(double)*theProblem->size);
+    theProblem->soluceY = malloc(sizeof(double)*theProblem->size);
     for (i = 0; i < theProblem->size; i++)      
         theProblem->soluce[i] = 0;
  
@@ -431,9 +422,11 @@ void femDiffusionFree(femDiffusionProblem *theProblem)
     femDiscreteFree(theProblem->space);
     femEdgesFree(theProblem->edges);
     femMeshFree(theProblem->mesh);
-    femSolverFree(theProblem->solver);
+    femBandSystemFree(theProblem->systemX);
+    femBandSystemFree(theProblem->systemY);
     free(theProblem->number);
-    free(theProblem->soluce);
+    free(theProblem->soluceX);
+    free(theProblem->soluceY);
     free(theProblem);
 }
     
@@ -452,12 +445,20 @@ void femDiffusionMeshLocal(const femDiffusionProblem *theProblem, const int iEle
         }   
 }
 
-void femDiffusionCompute(femDiffusionProblem *theProblem)
+void femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY)
 {
     femMesh *theMesh = theProblem->mesh;
     femIntegration *theRule = theProblem->rule;
     femDiscrete *theSpace = theProblem->space;
-    femSolver *theSolver = theProblem->solver;
+    femBandSystem *theSystem;
+    if(systIsY)
+    {
+        theSystem = theProblem->systemY;
+    }
+    else
+    {
+        theSystem = theProblem->systemX;    
+    }
     femEdges *theEdges = theProblem->edges;
     int *number = theProblem->number;
        
@@ -491,21 +492,79 @@ void femDiffusionCompute(femDiffusionProblem *theProblem)
                 dphidy[i] = (dphideta[i] * dxdxsi - dphidxsi[i] * dxdeta) / jac; }            
             for (i = 0; i < theSpace->n; i++) { 
                 for(j = 0; j < theSpace->n; j++) {
-                    Aloc[i*(theSpace->n)+j] += (dphidx[i] * dphidx[j] 
-                                            + dphidy[i] * dphidy[j]) * jac * weight; }}                                                                                            
-            for (i = 0; i < theSpace->n; i++) {
-                Bloc[i] += phi[i] * jac *weight; }}
-        femSolverAssemble(theSolver,Aloc,Bloc,Uloc,map,theSpace->n); } 
+                    Aloc[i*(theSpace->n)+j] += mu*(dphidx[i] * dphidx[j] 
+                                            + dphidy[i] * dphidy[j]) * jac * weight; 
+                }
+            }                                                                                            
+        }        
+        for(iGrains = 0; iGrains < theGrains->n; iGrains++)
+        {            
+            xGrains = theGrains->x[iGrains];
+            yGrains = theGrains->y[iGrains]; 
+            //if(elemContains(xGrains,yGrains,theMesh,iElem)==1)
+            //{
+                xsiGrains = -(x[0] * (y[2] - yGrains) + x[2] * (yGrains - y[0]) + xGrains * (y[0] - y[2]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
+                etaGrains = (x[0] * (y[1] - yGrains) + x[1] * (yGrains - y[0]) + xGrains * (y[0] - y[1]))/(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
+                femDiscretePhi2(theSpace,xsiGrains,etaGrains,phiGrains);
+                if(systIsY)
+                {
+                    vGrains = theGrains->vy[iGrains];
+                }
+                else
+                {
+                    vGrains = theGrains->vx[iGrains];
+                }
+                for (i = 0; i < theSpace->n; i++) 
+                { 
+                    Bloc[i] += gamma*phiGrains[i]*vGrains; 
+                    for(j = 0; j < theSpace->n; j++) 
+                    {
+                        Aloc[i*(theSpace->n)+j] += gamma*phiGrains[i]*phiGrains[j];
+                    }
+                }
+            //}
+        }
+        femBandSystemAssemble(theSystem, Aloc,Bloc,map,theSpace->n);
+    } 
 
     for (iEdge= 0; iEdge < theEdges->nEdge; iEdge++) {      
-        if (theEdges->edges[iEdge].elem[1] < 0) {       
-            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[0]],0.0); 
-            femSolverConstrain(theSolver,number[theEdges->edges[iEdge].node[1]],0.0); }}
+        if (theEdges->edges[iEdge].elem[1] < 0) {  
+            for (i = 0; i < 2; i++) 
+            {
+                double v;
+                int iNode = theEdges->edges[iEdge].node[i];
+                double xloc = theMesh->X[iNode];
+                double yloc = theMesh->Y[iNode];                
+                double Rin = 0.4;
+                double Rout = 2.0;  
+                double value = 0.0;              
+                double NormeCarree = xloc*xloc + yloc*yloc;
+                if((Rout*Rout - NormeCarree) < (NormeCarree - Rin*Rin))
+                {
+                    value = vExt;
+                }
+                if(systIsY)
+                {
+                    v = -value*(xloc/sqrt(NormeCarree));
+                }
+                else
+                {
+                    v = value*(yloc/sqrt(NormeCarree));
+                }     
+                femBandSystemConstrain(theSystem, number[iNode],v);                  
+            }
+        }
+    }
   
-    double *soluce = femSolverEliminate(theSolver);
-    for (i = 0; i < theProblem->mesh->nNode; i++)
-        theProblem->soluce[i] += soluce[number[i]];
-  
+    double *soluce = femBandSystemEliminate(theSystem);
+    if(systIsY){
+        for (i = 0; i < theProblem->mesh->nNode; i++)        
+        theProblem->soluceY[i] += soluce[number[i]];
+    }
+    else{
+        for (i = 0; i < theProblem->mesh->nNode; i++)        
+        theProblem->soluceX[i] += soluce[number[i]];
+    }  
 }
 
 

@@ -77,9 +77,12 @@ typedef struct {
     femEdges *edges;
     femDiscrete *space;
     femIntegration *rule;
+    femBandSystem *systemX;
+    femBandSystem *systemY;
     int size;
     int *number;
-    double *soluce;
+    double *soluceX;
+    double *soluceY;
 } femDiffusionProblem;
 
 
@@ -112,10 +115,10 @@ void                 femBandSystemConstrain(femBandSystem *myBand, int myNode, d
 void                 femBandSystemAssemble(femBandSystem* myBandSystem, double *Aloc, double *Bloc, int *map, int nLoc);
 double               femBandSystemGet(femBandSystem* myBandSystem, int i, int j);
  
-femDiffusionProblem *femDiffusionCreate(const char *filename, femSolverType solverType, femRenumType renumType);
+femDiffusionProblem *femDiffusionCreate(const char *filename, femRenumType renumType);
 void                 femDiffusionFree(femDiffusionProblem *theProblem);
 void                 femDiffusionMeshLocal(const femDiffusionProblem *theProblem, const int i, int *map, double *x, double *y, double *u);
-void                 femDiffusionCompute(femDiffusionProblem *theProblem);
+void                 femDiffusionCompute(femDiffusionProblem *theProblem, femGrains *theGrains, double mu, double gamma, double vExt, int systIsY);
 void                 femDiffusionRenumber(femDiffusionProblem *theProblem, femRenumType renumType);
 int                  femDiffusionComputeBand(femDiffusionProblem *theProblem);
 
